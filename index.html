@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>קונספט REMAX באר שבע</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+document.documentElement.classList.add('gl');
+window.__fallback = function () { var h = document.documentElement; if (h.classList.contains('nogl')) return; h.classList.remove('gl'); h.classList.add('nogl'); };
+setTimeout(function () { if (!window.__booted) window.__fallback(); }, 15000);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<style>
+:root{
+  --ink:#000E35; --mat:#0B1B4D; --cloud:#F2F0EA; --red:#AA1120; --red-hi:#E2303F; --sky:#A3D4F2; --gray:#5D6477;
+  --bg:#FFFFFF; --fg:#0E0E10; --bk:#0E0E10;
+  --pad:3.125vw;
+  --fd:'Heebo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --fc:'Barlow Condensed','Arial Narrow',Heebo,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color-scheme:dark;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+:focus-visible{outline:2px solid var(--red-hi);outline-offset:4px;border-radius:3px}
+body{background:var(--bg);color:var(--fg);font-family:var(--fd);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden;text-rendering:optimizeLegibility}
+::selection{background:var(--red);color:#fff}
+a{color:inherit;text-decoration:none}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:1}
+.layer{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#bgl{z-index:0}
+#ui{z-index:2}
+#chrome{z-index:4}
+#spacer{height:2600vh;position:relative;z-index:-1}
+.lat{font-family:var(--fc);font-weight:600;letter-spacing:.16em;text-transform:uppercase;direction:ltr;unicode-bidi:isolate}
+
+/* ---------- background layer ---------- */
+.glow{position:absolute;inset:-10%;opacity:0;
+  background:
+    radial-gradient(55vw 55vw at 2% 102%, rgba(170,17,32,.42), rgba(170,17,32,0) 62%),
+    radial-gradient(60vw 38vw at 92% -6%, rgba(163,212,242,.13), rgba(163,212,242,0) 70%)}
+.pool{position:absolute;inset:0;opacity:0;background:radial-gradient(30vw 17vw at 50% 62%, rgba(163,212,242,.13), rgba(163,212,242,0) 72%)}
+.giant{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;opacity:0}
+.giant i{font-style:normal}
+.giant span{font-weight:900;font-size:14.6vw;line-height:.8;letter-spacing:-.045em;color:var(--bk);white-space:nowrap;display:block}
+.pill{position:absolute;left:0;top:0;padding:.6em 1.1em .64em;border-radius:99px;background:#fff;color:var(--ink);font-weight:700;font-size:max(12px,.84vw);white-space:nowrap;will-change:transform,opacity;opacity:0;letter-spacing:.01em;box-shadow:0 0 0 1px rgba(0,14,53,.08),0 10px 24px -8px rgba(0,14,53,.28)}
+.pill b{display:inline-block;width:.42em;height:.42em;border-radius:50%;background:var(--red-hi);margin-inline-end:.55em;vertical-align:.12em}
+
+/* ---------- chrome: nav, rail, cue ---------- */
+.nav{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:calc(var(--pad)*.62) var(--pad) 0;pointer-events:auto;opacity:0}
+.logo{position:relative;height:22px;display:flex;align-items:center;-webkit-touch-callout:none;user-select:none}
+.logo .dot{display:none}
+.logo .mini{height:24px;width:auto;opacity:0;transform:translateY(8px);color:var(--fg);display:block}
+.links{display:flex;gap:calc(var(--pad)*.78)}
+.links a{font-weight:600;font-size:max(12px,.8vw);color:var(--fg);position:relative;padding:4px 0;letter-spacing:.02em}
+.links a::after{content:"";position:absolute;right:0;left:0;bottom:-2px;height:0;border-bottom:1.5px dotted currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.links a.on::after{transform:scaleX(1)}
+.links a:hover::after{transform:scaleX(1)}
+.links .ext{font-size:.8em;margin-inline-start:.3em;opacity:.6}
+.mob{display:none;align-items:center;gap:10px}
+.wa{height:34px;padding:0 14px;border-radius:99px;background:var(--red);color:#fff;font-weight:700;font-size:13px;display:inline-flex;align-items:center}
+.burger{width:38px;height:34px;border-radius:99px;border:1px solid currentColor;background:transparent;color:var(--fg);display:grid;place-content:center;gap:5px;cursor:pointer}
+.burger i{display:block;width:14px;height:1.5px;background:currentColor;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.burger[aria-expanded="true"] i:first-child{transform:translateY(3.25px) rotate(45deg)}.burger[aria-expanded="true"] i:last-child{transform:translateY(-3.25px) rotate(-45deg)}
+
+.rail{position:absolute;left:0;top:0;bottom:0;width:40px}
+.thumb{position:absolute;left:0;top:calc(var(--pad)*2.2);width:34px;height:208px;background:var(--fg);color:var(--bg);display:flex;flex-direction:column;align-items:center;padding-top:14px;gap:12px;transform:translateX(-110%);will-change:transform}
+.thumb .d{width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.thumb .t{writing-mode:vertical-rl;font-weight:700;font-size:12px;letter-spacing:.04em;white-space:nowrap}
+
+.cue{position:absolute;bottom:calc(var(--pad)*.62);right:var(--pad);display:flex;align-items:center;gap:10px;font-weight:600;font-size:max(11px,.74vw);letter-spacing:.06em;color:var(--fg);opacity:0;white-space:nowrap}
+.cue .r{width:26px;height:26px;border-radius:50%;border:1px dotted currentColor;display:grid;place-items:center;opacity:.9}
+.cue .r svg{width:10px;height:10px;animation:nudge 2.2s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes nudge{0%,100%{transform:translateY(-1.5px)}50%{transform:translateY(2px)}}
+.credits{position:absolute;right:var(--pad);bottom:calc(var(--pad)*.55);font-size:9px;letter-spacing:.14em;opacity:0;color:var(--fg)}
+.proto{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.55);font-size:10px;letter-spacing:.2em;opacity:0;color:var(--fg)}
+
+/* ---------- chapters ---------- */
+.vig{position:absolute;inset:0;background:radial-gradient(120% 95% at 55% 45%, rgba(0,8,30,0) 55%, rgba(0,8,30,.38) 100%);opacity:0}
+.ch{position:absolute;inset:0}
+.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c10{visibility:hidden}
+.ch a,.ch button{pointer-events:none}.ch.on a,.ch.on button{pointer-events:auto}
+.mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.04em}
+.mask > span{display:inline-block;will-change:transform}
+
+/* hero */
+.hero .wm-wrap{position:absolute;top:calc(var(--pad)*1.5);right:calc(var(--pad) - .6vw);direction:ltr}
+.hero .tag{position:absolute;top:-.2vw;left:3.2vw;font-weight:700;font-size:1.06vw;letter-spacing:.01em;white-space:nowrap;direction:rtl;color:var(--bk)}
+.wordmark{margin-top:1.3vw;color:var(--bk)}
+.wordmark svg{display:block;width:45vw;height:auto;fill:currentColor;overflow:hidden}
+.lede{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.62);font-weight:500;font-size:max(12px,.86vw);line-height:1.55;letter-spacing:.01em;color:var(--bk)}
+.lede .l:first-child{font-weight:700}
+.lede .l{display:block}
+@media (max-aspect-ratio: 1/1){.cue{display:none}}
+.card{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.05);width:17.6vw;height:23.5vw;padding:1.45vw 1.45vw 1.35vw;display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(160deg,rgba(242,240,234,.16),rgba(242,240,234,.06));-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15);
+  box-shadow:inset 0 0 0 1px rgba(242,240,234,.09);opacity:0}
+.card h3{font-weight:800;font-size:1.5vw;line-height:1.08;letter-spacing:-.005em}
+.card .div{height:0;border-top:1.5px dotted rgba(242,240,234,.55);margin-bottom:1.1vw}
+.card p{font-weight:600;font-size:1.04vw;line-height:1.32;text-align:left;max-width:12.5vw;margin-right:auto;opacity:.92}
+.coords{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.95);display:flex;align-items:flex-end;gap:22px;opacity:0;color:var(--cloud)}
+.coords svg{display:block}
+.coords .c{font-size:10.5px;line-height:1.7;opacity:.85}
+
+/* ch2 */
+.c2 .stmt{position:absolute;right:9.4vw;top:50%;translate:0 -50%;font-weight:900;font-size:4.25vw;line-height:.96;letter-spacing:-.025em;color:var(--fg)}
+.c2 .stmt .mask{display:block}
+.c2 .p{opacity:0;position:absolute;left:7.6vw;top:50%;translate:0 -46%;width:15vw;font-weight:600;font-size:1.42vw;line-height:1.32;color:var(--fg)}
+.c2 .p .w{display:inline-block;opacity:.14;will-change:opacity}
+.c2 .p sup{font-size:.6em;vertical-align:.55em;color:var(--red);font-weight:800}
+.foot{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.6);width:13vw;opacity:0;color:var(--fg)}
+.foot i{display:block;border-top:1.5px dotted currentColor;opacity:.45;margin-bottom:10px}
+.foot span{font-weight:600;font-size:max(11px,.74vw);line-height:1.4;display:block;opacity:.85}
+
+/* ch3 */
+.c3 .lead{position:absolute;right:calc(var(--pad)*1.2);top:8.6%;font-weight:800;font-size:2.05vw;color:var(--bk);opacity:0;letter-spacing:-.01em}
+.c3 .cap{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.4);width:19vw;text-align:right;font-weight:600;font-size:1.05vw;line-height:1.4;color:var(--bk);opacity:0}
+.sel{position:absolute;left:0;top:0;overflow:visible;opacity:0}
+.sel rect.box{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:3 4}
+.sel .h{fill:#fff;stroke:var(--bk);stroke-width:1.2}
+.sel .rot{fill:var(--bk)}
+.sel .tick{stroke:var(--ink);stroke-width:1}
+.dim{position:absolute;left:0;top:0;transform:translate(-50%,-100%);background:var(--bk);color:#fff;font-size:11px;padding:3px 8px 4px;border-radius:3px;white-space:nowrap;opacity:0;font-weight:600}
+.gobo{position:absolute;inset:-20%;opacity:0;mix-blend-mode:multiply;
+  background:repeating-linear-gradient(112deg, rgba(0,14,53,0) 0 7vw, rgba(0,14,53,.085) 7vw 10.6vw);
+  filter:blur(22px);-webkit-mask-image:radial-gradient(70% 80% at 80% 30%, #000 20%, transparent 70%);mask-image:radial-gradient(70% 80% at 80% 30%, #000 20%, transparent 70%)}
+
+/* end */
+.c4 .k{position:absolute;right:50%;translate:50% 0;top:51%;font-size:11px;letter-spacing:.24em;opacity:0}
+.c4{color:var(--fg)}
+.c4 .cred{position:absolute;left:0;right:0;bottom:calc(var(--pad)*.5);text-align:center;font-size:10.5px;line-height:1.7;opacity:0}.c4 .cred .lat{font-size:9px;letter-spacing:.14em}
+.c4 h2{position:absolute;left:0;right:0;top:55%;text-align:center;font-weight:900;font-size:5.5vw;line-height:.94;letter-spacing:-.03em}
+.c4 h2 .mask{display:block}
+.c4 .row{position:absolute;left:0;right:0;bottom:calc(var(--pad)*1.5);display:flex;justify-content:center;align-items:center;gap:14px;opacity:0;flex-wrap:wrap}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1.5px currentColor;color:var(--fg)}.btn.ghost:hover{background:rgba(128,128,128,.1)}
+
+/* real home: the photo film that the 3D dive hands off to */
+#real{position:absolute;inset:0;opacity:0;overflow:hidden;background:#d9d6cf}
+#real .rp{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;will-change:transform,opacity;transform-origin:50% 50%;user-select:none}
+#real .rp:first-child{opacity:1}
+#real .glare{position:absolute;inset:-10% -30%;opacity:0;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(38% 60% at 30% 40%,rgba(255,236,200,.75),rgba(255,236,200,0) 70%)}
+#real .shade{position:absolute;inset:0;opacity:0;background:linear-gradient(0deg,rgba(6,8,18,.86) 0%,rgba(6,8,18,.5) 30%,rgba(6,8,18,0) 62%),linear-gradient(270deg,rgba(6,8,18,.28),rgba(6,8,18,0) 40%)}
+.c8{color:#fff}
+.c8 .kick{right:var(--pad);top:auto;bottom:calc(var(--pad)*1.2 + 9.6vw);color:#fff}
+.ch8h{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.2 + 2.6vw);font-weight:900;font-size:5.6vw;line-height:.96;letter-spacing:-.03em;color:#fff}
+.ch8h .mask{display:block}
+.c8 .sub{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.2);font-weight:600;font-size:1.25vw;opacity:0;color:#fff}
+.fcard{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.2);width:24vw;padding:1.5vw 1.6vw 1.4vw;color:#fff;opacity:0;
+  background:linear-gradient(160deg,rgba(14,16,28,.62),rgba(14,16,28,.42));-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.fcard .ty{font-weight:700;font-size:.92vw;opacity:.75}
+.fcard .pr{font-weight:900;font-size:3vw;line-height:1.05;letter-spacing:-.03em;margin:.4vw 0 .9vw;font-variant-numeric:tabular-nums}
+.fcard .pr span{direction:rtl;unicode-bidi:isolate}
+.fcard .sp,.fcard .lo,.fcard .ag2{font-weight:600;font-size:1vw;padding:.62vw 0;border-top:1.5px dotted rgba(255,255,255,.32)}
+.fcard .lo,.fcard .ag2{opacity:.82}
+.fcard .acts{display:flex;gap:10px;margin-top:1.1vw;flex-wrap:wrap}
+.fcard .btn{height:42px;padding:0 18px;font-size:13.5px}
+.fcard .btn.ghost{color:#fff}
+.fcard .vid{display:inline-block;margin-top:.9vw;font-weight:700;font-size:12.5px;border-bottom:1.5px dotted currentColor;padding-bottom:2px;opacity:.9}
+.c8 .pcred{position:absolute;right:var(--pad);top:calc(var(--pad)*2.4);font-size:10px;letter-spacing:.06em;opacity:0;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.c8 .still{display:none}
+
+/* more than a brokerage: investments, academy, careers */
+.c9{color:var(--cloud)}
+.c9 .kick{right:var(--pad);top:16%}
+.ch9h{position:absolute;right:var(--pad);top:20%;font-weight:900;font-size:6.2vw;line-height:.94;letter-spacing:-.03em;color:var(--cloud)}
+.ch9h .mask{display:block}
+.stats{position:absolute;left:var(--pad);right:var(--pad);bottom:calc(var(--pad)*1.6);display:grid;grid-template-columns:repeat(3,1fr);gap:2.4vw}
+.stats div{opacity:0;border-top:1.5px dotted rgba(242,240,234,.35);padding-top:1.1vw}
+.stats b{display:block;font-family:var(--fc);font-weight:600;font-size:6.4vw;line-height:.9;letter-spacing:.01em;direction:ltr;text-align:right;color:#fff}
+.stats span{display:block;font-weight:600;font-size:1.05vw;margin-top:.7vw;opacity:.75}
+.pn{position:absolute;inset:0;opacity:0;pointer-events:none;visibility:hidden}
+.ch.on .pn.act{pointer-events:auto}
+.pn .pk{position:absolute;right:var(--pad);top:15%;font-size:11px;letter-spacing:.22em;opacity:.7}
+.pn .pt{position:absolute;right:var(--pad);top:19.5%;width:46vw;font-weight:900;font-size:4.6vw;line-height:.98;letter-spacing:-.025em;color:#fff}
+.pn .pd{position:absolute;right:var(--pad);top:calc(19.5% + 10.4vw);width:34vw;font-weight:600;font-size:1.22vw;line-height:1.45;opacity:.86}
+.pn .pa{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.5);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.pn .pa .btn.ghost{color:var(--cloud)}
+.pn .pa small{font-size:12px;opacity:.6;font-weight:600}
+.pn .pf{position:absolute;left:var(--pad);top:19.5%;width:33vw;list-style:none}
+.pn .pf li{display:grid;grid-template-columns:11vw 1fr;align-items:baseline;gap:1.2vw;padding:1.15vw 0;border-top:1.5px dotted rgba(242,240,234,.3)}
+.pn .pf li:last-child{border-bottom:1.5px dotted rgba(242,240,234,.3)}
+.pn .pf b{font-family:var(--fc);font-weight:600;font-size:3.6vw;line-height:.9;direction:ltr;text-align:right;color:#fff;font-variant-numeric:tabular-nums}
+.pn .pf span{font-weight:600;font-size:1.02vw;line-height:1.4;opacity:.82}
+.pn .pf li.hot span::after{content:"ההרשמה פתוחה";display:inline-block;margin-inline-start:.6em;font-size:.82em;padding:2px 8px 3px;border-radius:99px;background:var(--red);color:#fff;vertical-align:.1em}
+.pn .note{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.5);width:33vw;font-size:10.5px;line-height:1.5;opacity:.55}
+.pn .qt{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.5);width:33vw;display:flex;gap:1.2vw;align-items:flex-start}
+.pn .qt img{width:4.6vw;height:4.6vw;border-radius:50%;object-fit:cover;flex:none;filter:grayscale(1)}
+.pn .qt p{font-weight:700;font-size:1.2vw;line-height:1.4}
+.pn .qt cite{display:block;font-style:normal;font-weight:600;font-size:.9vw;opacity:.6;margin-top:.5vw}
+
+/* google reviews */
+.c10{color:var(--bk)}
+.c10 .kick{right:var(--pad);top:14%;color:var(--bk)}
+.rate{position:absolute;left:var(--pad);top:18%;width:30vw;opacity:0;text-align:left}
+.rate b{display:block;font-family:var(--fc);font-weight:600;font-size:15vw;line-height:.82;letter-spacing:-.01em;direction:ltr;text-align:left}
+.stars{position:relative;display:inline-block;font-size:2.1vw;letter-spacing:.12em;line-height:1;margin-top:1.2vw;direction:ltr;color:rgba(14,14,16,.16)}
+.stars::before{content:"★★★★★"}
+.stars i{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:var(--bk);width:calc(var(--f) * 100%)}
+.stars i::before{content:"★★★★★"}
+.rate p{font-weight:700;font-size:1.15vw;margin-top:1vw}
+.rate a{display:inline-block;margin-top:1.4vw;font-weight:700;font-size:13px;border-bottom:1.5px dotted currentColor;padding-bottom:3px}
+.quotes{position:absolute;right:var(--pad);top:24%;width:52vw;height:50vh}
+.qq{position:absolute;inset:0;opacity:0;visibility:hidden}
+.qq blockquote{position:relative;font-weight:800;font-size:3vw;line-height:1.18;letter-spacing:-.015em}
+.qq blockquote::before{content:"”";position:absolute;right:-.05em;top:-.62em;font-size:2.2em;line-height:1;color:var(--red);font-weight:900}
+.qq .qm{margin-top:2.2vw;font-weight:600;font-size:1.05vw;opacity:.72;display:flex;gap:.7em;flex-wrap:wrap;align-items:center}
+.qq .qm b{font-weight:800;opacity:1}
+.qq .qm a{border-bottom:1.5px dotted currentColor}
+.qbar{position:absolute;right:var(--pad);bottom:calc(var(--pad)*2.6);width:52vw;height:2px;background:rgba(14,14,16,.1);opacity:0}
+.qbar i{position:absolute;inset:0;background:var(--bk);transform-origin:right;transform:scaleX(0)}
+.c10 .qnote{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.4);font-size:10.5px;opacity:0}
+
+/* city */
+.city{position:absolute;inset:0;opacity:0;overflow:hidden;background:var(--ink)}
+.city img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;filter:grayscale(.3) contrast(1.08) brightness(.62) saturate(.85);transform-origin:50% 62%;will-change:transform}
+.city::after{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(0,14,53,.9) 0%,rgba(0,14,53,.25) 42%,rgba(0,14,53,.2) 58%,rgba(0,14,53,.88) 100%),linear-gradient(0deg,rgba(0,14,53,.85),rgba(0,14,53,0) 45%)}
+.kick{position:absolute;font-size:11px;letter-spacing:.22em;opacity:0;color:var(--fg)}
+.c5 .kick{right:var(--pad);top:21%}
+.ch5h{position:absolute;right:var(--pad);top:25%;font-weight:900;font-size:4.7vw;line-height:.98;letter-spacing:-.025em;color:var(--cloud)}
+.ch5h .mask{display:block}.ch5h b{font-variant-numeric:tabular-nums;font-weight:900;color:#fff}
+.idx{position:absolute;left:var(--pad);top:22%;width:31vw;color:var(--cloud)}
+.idx .hd,.idx .row{display:grid;grid-template-columns:1fr 5vw 8.5vw;align-items:baseline;padding:.72vw 0;border-top:1.5px dotted rgba(242,240,234,.28)}
+.idx .hd{border-top:0;font-size:10.5px;letter-spacing:.16em;opacity:0;padding-bottom:.4vw}
+.idx .row{opacity:0;font-size:1.12vw;font-weight:600}
+.idx .row b{font-weight:800}.idx .row .n,.idx .row .m{font-family:var(--fc);font-weight:600;font-size:1.2vw;letter-spacing:.04em;font-variant-numeric:tabular-nums;direction:ltr;text-align:left}.idx .row .m{direction:rtl}
+.idx .row .n{color:var(--sky)}
+.c5 .note{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.4);width:31vw;font-size:11px;line-height:1.45;opacity:0;color:var(--cloud)}
+.c5 .credit{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.4);font-size:9px;letter-spacing:.14em;opacity:0;color:var(--cloud)}
+
+/* team */
+.c6 .kick{right:var(--pad);top:13%}
+.ch6h{position:absolute;right:var(--pad);top:16.5%;font-weight:900;font-size:4.4vw;line-height:.98;letter-spacing:-.025em;color:var(--cloud)}
+.ch6h .mask{display:block}
+.ribbon{position:absolute;left:0;top:60%;display:flex;gap:2.2vw;direction:ltr;will-change:transform;opacity:0}
+.ag{flex:none;width:10.5vw;height:10.5vw;border-radius:50%;overflow:hidden;display:block;background:#0B1B4D;will-change:transform,opacity}
+.ag img{width:100%;height:100%;object-fit:cover;display:block}
+.tframe{position:absolute;left:50%;top:60%;width:16vw;height:16vw;translate:-50% -50%;opacity:0;pointer-events:none}
+.tframe svg{position:absolute;inset:-10px;width:calc(100% + 20px);height:calc(100% + 20px);overflow:visible}
+.tframe rect.b{fill:none;stroke:rgba(242,240,234,.7);stroke-width:1;stroke-dasharray:3 4}
+.tframe .h{fill:var(--ink);stroke:var(--red-hi);stroke-width:1.3}
+.tlabel{position:absolute;top:calc(100% + 26px);left:50%;translate:-50% 0;text-align:center;white-space:nowrap;color:var(--cloud)}
+.tlabel b{display:block;font-weight:800;font-size:1.5vw;letter-spacing:-.01em}
+.tlabel span{display:block;font-size:.86vw;opacity:.7;margin-top:.35vw}
+.tcount{position:absolute;top:-34px;left:50%;translate:-50% 0;background:var(--red);color:#fff;font-size:10.5px;padding:3px 8px 4px;border-radius:3px;letter-spacing:.14em;white-space:nowrap}
+.more{position:absolute;left:var(--pad);bottom:calc(var(--pad)*1.4);font-weight:700;font-size:14px;color:var(--fg);opacity:0;border-bottom:1.5px dotted currentColor;padding-bottom:3px}
+
+/* catalog (magazine) */
+.c7 .kick{right:var(--pad);top:11.5vh;font-weight:700;font-size:13px;letter-spacing:.02em}
+.magp{position:absolute;left:var(--pad);top:15vh;width:57vw;height:72vh;opacity:0}
+.mp{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 0 0 100%);display:block;background:#ddd}
+.mp img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.06);will-change:transform}
+.mp .tagl{position:absolute;left:14px;bottom:14px;background:rgba(0,14,53,.82);color:#fff;font-size:10.5px;letter-spacing:.16em;padding:5px 9px 6px;border-radius:3px}
+.magi{position:absolute;right:var(--pad);top:15vh;width:29vw;height:72vh;color:var(--ink)}
+.mi{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;opacity:0}
+.mi .no{font-size:11px;letter-spacing:.2em;opacity:.55;margin-bottom:auto;padding-top:4.5vh}
+.mi .ty{font-weight:700;font-size:1.05vw;opacity:.6;margin-bottom:.6vw}
+.mi .pr{font-weight:900;font-size:4vw;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:1.3vw}
+.mi .pr span{direction:rtl;unicode-bidi:isolate}
+.mi .sp{font-weight:700;font-size:1.32vw;padding:.9vw 0;border-top:1.5px dotted rgba(0,14,53,.3)}
+.mi .lo{font-weight:600;font-size:1.12vw;opacity:.78;padding:.9vw 0;border-top:1.5px dotted rgba(0,14,53,.3)}
+.mi .ag2{font-weight:600;font-size:1vw;opacity:.7;padding:.9vw 0 1.6vw;border-top:1.5px dotted rgba(0,14,53,.3)}
+.mi .go{align-self:flex-start;font-weight:700;font-size:13px;height:40px;padding:0 18px;border-radius:99px;background:var(--ink);color:var(--cloud);display:inline-flex;align-items:center}
+.magbar{position:absolute;left:var(--pad);top:calc(15vh + 72vh + 14px);width:57vw;height:2px;background:rgba(0,14,53,.12);opacity:0}
+.magbar i{position:absolute;inset:0;background:var(--red);transform-origin:right;transform:scaleX(0)}
+.c7 .more{left:auto;right:var(--pad);bottom:calc(var(--pad)*1.1)}
+
+.btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 22px;border-radius:99px;background:var(--red);color:#fff;font-weight:700;font-size:14px;transition:background .3s, transform .5s cubic-bezier(.16,1,.3,1)}
+.btn:hover{background:#c3182a;transform:translateY(-2px)}
+.btn .lat{letter-spacing:.06em;font-size:16px}
+.addr{font-weight:600;font-size:13px;opacity:.8}
+
+/* ---------- preloader ---------- */
+#pre{position:fixed;inset:0;z-index:20;pointer-events:none;background:#FFFFFF}
+html.gl #ui,html.gl #chrome{visibility:hidden}
+#pre canvas{position:absolute;inset:0;width:100%;height:100%}
+
+/* ---------- mobile ---------- */
+@media (max-aspect-ratio: 1/1){
+  :root{--pad:5.6vw}
+  .hero .wm-wrap{top:calc(var(--pad)*3.2);right:var(--pad)}
+  .wordmark svg{width:88vw}
+  .hero .tag{font-size:3.4vw;left:1vw;top:-2.6vw}
+  .lede{left:var(--pad);right:var(--pad);bottom:calc(var(--pad)*1.2);font-size:3.3vw;line-height:1.5}
+  .card,.coords{display:none}
+  .thumb .t,.thumb .d{display:none}
+  .thumb{width:5px !important;height:90px !important;padding:0 !important}
+  .links{position:fixed;inset:0;background:var(--ink);flex-direction:column;justify-content:center;align-items:flex-start;gap:6vh;padding:0 calc(var(--pad)*2);opacity:0;pointer-events:none;transition:opacity .45s}
+  .links.open{opacity:1;pointer-events:auto}
+  .links a{font-size:9vw;font-weight:800;color:var(--cloud)}
+  .mob{display:flex;position:relative;z-index:2}
+  .c2 .stmt{right:var(--pad);top:16%;translate:none;font-size:11vw}
+  .c2 .p{left:var(--pad);right:var(--pad);width:auto;top:auto;bottom:16%;translate:none;font-size:4.6vw}
+  .foot{width:60vw;bottom:calc(var(--pad)*2.6)}
+  .giant{align-items:center;padding-top:0}
+  .giant span{font-size:41vw;white-space:normal;text-align:center;line-height:.86}
+  .giant i{display:block}
+  .giant i:last-child{margin-top:40vh}
+  .c3 .lead{top:8.2%;font-size:5.6vw}
+  .c3 .cap{width:84vw;font-size:3.8vw;bottom:5%;left:8vw;text-align:center}
+  .c4 h2{font-size:14vw;top:52%}
+  .c4 .k{top:47%}
+  .c4 .row{flex-direction:column;gap:10px}
+  .ch5h{top:13%;font-size:10vw}.c5 .kick{top:9.5%}
+  .idx{left:var(--pad);right:var(--pad);width:auto;top:auto;bottom:15%}
+  .idx .hd,.idx .row{grid-template-columns:1fr 14vw 22vw;padding:2.2vw 0}.idx .row{font-size:3.7vw}.idx .row .n,.idx .row .m{font-size:3.9vw}
+  .idx .row:nth-child(n+8){display:none}
+  .c5 .note{width:auto;right:var(--pad);bottom:calc(var(--pad)*1.2);font-size:10px}.c5 .credit{display:none}
+  .city::after{background:linear-gradient(0deg,rgba(0,14,53,.92) 8%,rgba(0,14,53,.25) 52%,rgba(0,14,53,.85) 100%)}
+  .city img{filter:grayscale(.2) contrast(1.06) brightness(.75)}
+  .ch6h{top:11%;font-size:10vw}.c6 .kick{top:8%}
+  .ag{width:26vw;height:26vw}.ribbon{gap:5vw;top:56%}
+  .tframe{width:38vw;height:38vw;top:56%}.tlabel b{font-size:5vw}.tlabel span{font-size:3.2vw;margin-top:1vw}
+  .magp{left:var(--pad);right:var(--pad);width:auto;top:13vh;height:44vh}.magbar{width:auto;right:var(--pad);top:calc(13vh + 44vh + 10px)}
+  .magi{left:var(--pad);right:var(--pad);width:auto;top:auto;bottom:4vh;height:34vh}
+  .mi .no{display:none}.mi .ty{font-size:3.4vw}.mi .pr{font-size:10vw;margin-bottom:2.5vw}.mi .sp,.mi .lo,.mi .ag2{font-size:3.8vw;padding:2vw 0}
+  .c7 .kick{top:9vh}.c7 .more{display:none}
+  .c8 .kick{bottom:auto;top:calc(var(--pad)*3.4)}
+  .ch8h{right:var(--pad);left:var(--pad);bottom:auto;top:calc(var(--pad)*3.4 + 22px);font-size:11.5vw}
+  .c8 .sub{left:var(--pad);right:var(--pad);bottom:auto;top:calc(var(--pad)*3.4 + 22px + 24vw);font-size:4vw}
+  .fcard{left:var(--pad);right:var(--pad);width:auto;bottom:calc(var(--pad)*1);padding:4.4vw 4.6vw}
+  .fcard .ty{font-size:3.2vw}.fcard .pr{font-size:9vw;margin:1vw 0 2.4vw}.fcard .sp,.fcard .lo,.fcard .ag2{font-size:3.6vw;padding:1.8vw 0}
+  .fcard .acts{margin-top:3vw}.fcard .vid{margin-top:3vw}
+  .c8 .pcred{display:none}
+  #real .shade{background:linear-gradient(0deg,rgba(6,8,18,.82) 0%,rgba(6,8,18,.35) 48%,rgba(6,8,18,0) 62%),linear-gradient(180deg,rgba(6,8,18,.7) 0%,rgba(6,8,18,0) 34%)}
+  .c4 .cred{font-size:9px;padding:0 var(--pad);line-height:1.5}.c4 .cred .lat{display:none}
+  .c4 .row{bottom:calc(var(--pad)*1.4 + 28px)}
+  .c9 .kick{top:12%}.ch9h{top:15.5%;font-size:13vw}
+  .stats{grid-template-columns:1fr;gap:0;bottom:calc(var(--pad)*1.4)}
+  .stats div{display:flex;align-items:baseline;gap:4vw;padding:2.6vw 0}.stats b{font-size:13vw;min-width:26vw}.stats span{font-size:3.7vw;margin-top:0}
+  .pn .pk{top:11.5%}.pn .pt{top:14.5%;left:var(--pad);width:auto;font-size:9.6vw}
+  .pn .pd{top:calc(14.5% + 21vw);left:var(--pad);width:auto;font-size:3.9vw}
+  .pn .pf{top:auto;bottom:calc(var(--pad)*2 + 52px);right:var(--pad);width:auto}
+  .pn .pf li{grid-template-columns:22vw 1fr;padding:2.4vw 0}.pn .pf b{font-size:8vw}.pn .pf span{font-size:3.5vw}
+  .pn .pa{bottom:calc(var(--pad)*1)}.pn .pa small{display:none}
+  .pn .note,.pn .qt{display:none}
+  .c10 .kick{top:10%}
+  .rate{left:var(--pad);right:var(--pad);top:13%;width:auto;display:grid;grid-template-columns:auto 1fr;column-gap:4vw;align-items:end}
+  .rate b{font-size:27vw;grid-row:span 3}.stars{font-size:5.4vw;margin-top:0}.rate p{font-size:3.7vw;margin-top:1vw}.rate a{font-size:12.5px;margin-top:2vw}
+  .quotes{left:var(--pad);right:var(--pad);width:auto;top:42%;height:40vh}
+  .qq blockquote{font-size:7vw}.qq .qm{font-size:3.4vw;margin-top:4vw}
+  .qbar{left:var(--pad);right:var(--pad);width:auto;bottom:calc(var(--pad)*3.4)}
+  .c10 .qnote{left:var(--pad);font-size:9.5px}
+  #spacer{height:2040vh}
+  .pill{font-size:11px}
+}
+@media (prefers-reduced-motion: reduce){ .cue .r svg{animation:none} }
+
+/* ---------- fallback: no WebGL / scripts blocked -> readable static page ---------- */
+html.nogl,html.nogl body{background:#fff;color:var(--bk);overflow:auto}
+html.nogl body{display:flex;flex-direction:column}html.nogl #chrome{order:-1}html.nogl .hero .wm-wrap{display:flex;flex-direction:column;align-items:flex-end}
+html.nogl #pre,html.nogl #gl,html.nogl #spacer,html.nogl #bgl,html.nogl #real,html.nogl .vig,html.nogl .gobo,html.nogl .sel,html.nogl #dim,html.nogl #pillsFront,html.nogl .rail,html.nogl .cue,html.nogl .proto,html.nogl .credits,html.nogl .coords{display:none!important}
+html.nogl .layer{position:relative;inset:auto;pointer-events:auto;overflow:visible}
+html.nogl #chrome{position:sticky;top:0;background:rgba(255,255,255,.94);height:64px;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+html.nogl .c5,html.nogl .c6{background:var(--ink);color:var(--cloud)}html.nogl .c5 .kick,html.nogl .c6 .kick{color:var(--cloud)}html.nogl .nav .links a{color:var(--bk)}
+html.nogl .nav{opacity:1;position:relative;padding:18px var(--pad)}
+html.nogl .logo .mini{opacity:1;transform:none}html.nogl .logo .dot{display:none}
+html.nogl #ui .ch{position:relative;inset:auto;visibility:visible;padding:12vh var(--pad);border-bottom:1px solid rgba(242,240,234,.12)}
+html.nogl #ui .ch *{position:static!important;translate:none!important;transform:none!important;opacity:1!important;filter:none!important;visibility:visible!important}
+html.nogl .hero .wm-wrap{display:block}html.nogl .wordmark svg{width:min(560px,86vw)}
+html.nogl .lede,html.nogl .c2 .p,html.nogl .c3 .cap{width:auto;max-width:34em;font-size:clamp(17px,2vw,24px);margin-top:28px;text-align:right}
+html.nogl .card{width:auto;height:auto;max-width:420px;margin-top:32px;gap:24px}
+html.nogl .card h3{font-size:22px}html.nogl .card p{font-size:15px}
+html.nogl .c2 .stmt,html.nogl .c4 h2{font-size:clamp(40px,7vw,96px)}
+html.nogl .c3 .lead{color:var(--cloud);font-size:clamp(22px,3vw,40px)}
+html.nogl .c3 .cap{color:var(--cloud)}
+html.nogl .giant,html.nogl .ribbon,html.nogl .tframe,html.nogl .magp,html.nogl .magbar,html.nogl .qbar{display:none}
+html.nogl .c9{background:var(--ink)}html.nogl .pn,html.nogl .qq{position:static!important;visibility:visible!important;padding:28px 0}html.nogl .stats{display:block}html.nogl .pn .pf li{display:block}html.nogl .rate,html.nogl .quotes{width:auto;height:auto}html.nogl .qq blockquote{font-size:22px}
+html.nogl .idx{width:auto;max-width:520px;margin-top:24px}html.nogl .idx .row{opacity:1}html.nogl .magi{position:static;width:auto;height:auto}html.nogl .mi{position:static!important;opacity:1;padding:18px 0}
+html.nogl .c4 .row{display:flex;justify-content:flex-start;margin-top:32px}
+html.nogl .c8{color:var(--fg)}html.nogl .c8 .still{display:block;width:100%;max-width:900px;height:auto;margin:20px 0}html.nogl .fcard{width:auto;max-width:520px;background:var(--ink)}
+html.nogl .wl{transform:none!important}
+
+</style>
+</head>
+<body>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<div class="layer" id="bgl" aria-hidden="true">
+  <div class="glow"></div>
+  <div class="pool"></div>
+  <div class="giant" id="giant"><span><i>בבאר</i> <i>שבע</i></span></div>
+  <div id="pillsBack"></div>
+  <div class="city" id="city"><img src="assets/city/aerial.webp" alt="" decoding="async"></div>
+</div>
+
+<div class="layer" id="ui">
+  <div class="vig"></div>
+  <div id="real" aria-hidden="true">
+    <img class="rp" src="assets/real/r0.webp" alt="" decoding="async" width="1600" height="1056">
+    <img class="rp" src="assets/real/r2.webp" alt="" decoding="async" width="1536" height="1008">
+    <div class="glare"></div>
+    <div class="shade"></div>
+  </div>
+  <section class="ch hero" aria-label="REMAX באר שבע">
+    <div class="wm-wrap">
+      <h1 class="wordmark" aria-label="REMAX"><svg viewBox="28.6 15.2 191.2 45.2" aria-hidden="true"><g class="wl"><path d="M51.2,34.7c-1,.9-2.7,1.4-5.1,1.4h-5.7v-10.7h5.6c2.5,0,4.2.4,5.2,1.3,1,.9,1.5,2.2,1.5,4s-.5,3.2-1.5,4.1ZM56.9,42.2c4.3-2.5,6.5-6.5,6.5-12s-1.3-7.4-4-9.8c-2.7-2.4-6.9-3.6-12.8-3.6h-17v42.3h10.7v-14.6h6.6l7.1,14.6h11.7l-8.8-17Z"/></g><g class="wl"><path d="M94.9,25.7v-8.9h-29.2v42.3h15.7l4.6-8.9h-9.2v-8.1h13.4l4.7-9h-18.1v-7.5h18.1Z"/></g><g class="wl"><path d="M199.9,37.3l12.6-20.5h-12.1l-7.2,12.9-7.2-12.9h-12.6l12.6,20.1-8.6,14-11.6-34.1h-13.7l-12.3,35.9V16.8h-13l-9.4,28.6-9.4-28.6h-4.6l-8.5,16.4v26h10.1v-25l8.1,25h8.1l8.2-25.1v25.1h19.4l2.6-8.1h14.7l2.5,8.1h0s0,0,0,0h15.8l8.2-14.8,8.8,14.8h12.7l-14.3-21.8ZM154.1,42l4.7-15.8,4.7,15.8h-9.5Z"/></g><g class="wl reg"><path d="M218.8,18.6c0,1.1-.8,1.8-1.8,1.8s-1.8-.7-1.8-1.8.8-1.8,1.8-1.8,1.8.7,1.8,1.8ZM218.5,18.6c0-.9-.7-1.5-1.4-1.5s-1.4.6-1.4,1.5.7,1.5,1.4,1.5,1.4-.6,1.4-1.5ZM217.5,18.7l.4.8h-.5l-.4-.7h-.2v.7h-.5v-1.9h.8c.5,0,.7.2.7.6s-.1.4-.4.5ZM216.8,18.4h.3c.2,0,.3,0,.3-.3s-.1-.3-.3-.3h-.3v.5Z"/></g></svg></h1>
+    </div>
+  </section>
+
+  <section class="ch c2" id="office" aria-label="זה לא רק נכס">
+    <h2 class="stmt"><span class="mask"><span>זה לא רק</span></span><span class="mask"><span>נכס.</span></span></h2>
+    <p class="p" id="c2p">זו התוצאה של יותר מ-20 שנה בנגב, יותר מ-750 נכסים בניהול ומחיר שנשען על עסקאות אמת<sup>*</sup></p>
+    <div class="foot"><i></i><span>* עסקאות שנסגרו בפועל ברחוב ובשכונה שלכם, לא מחירי מודעות.</span></div>
+  </section>
+
+  <section class="ch c3" id="hoods" aria-label="מכירים כל רחוב">
+    <div class="gobo"></div>
+    <p class="lead">מכירים כל רחוב,</p>
+    <svg class="sel" id="sel" width="10" height="10">
+      <rect class="box" x="0" y="0" width="10" height="10"/>
+      <line class="tick t1" x1="0" y1="0" x2="0" y2="0"/><line class="tick t2" x1="0" y1="0" x2="0" y2="0"/>
+      <rect class="h h1" width="7" height="7"/><rect class="h h2" width="7" height="7"/><rect class="h h3" width="7" height="7"/><rect class="h h4" width="7" height="7"/>
+      <rect class="h h5" width="7" height="7"/><rect class="h h6" width="7" height="7"/><rect class="h h7" width="7" height="7"/><rect class="h h8" width="7" height="7"/>
+      <circle class="rot" r="3.2"/>
+    </svg>
+    <div class="dim" id="dim">דגם 4 חדרים · <span class="lat">12.25 × 9.05</span> מ׳</div>
+    <div id="pillsFront"></div>
+    <p class="cap">64 סוכנים שמכירים כל שכונה, את הקונים ואת המחירים האמיתיים.</p>
+  </section>
+
+
+  <section class="ch c8" id="home1" aria-label="נכס נבחר בפארק הנחל">
+    <p class="kick lat">From model to home · Park HaNahal</p>
+    <h2 class="ch8h"><span class="mask"><span>זה כבר לא דגם.</span></span></h2>
+    <p class="sub">זו דירה אמיתית בפארק הנחל, ואפשר לבוא לראות אותה.</p>
+    <img class="still" src="assets/real/r0.webp" alt="סלון ופינת אוכל בדירה בפארק הנחל" loading="lazy" decoding="async" width="1600" height="1056">
+    <div class="fcard">
+      <p class="ty">דירה למכירה · פארק הנחל</p>
+      <p class="pr"><span>2,080,000 ₪</span></p>
+      <p class="sp">5 חדרים · 220 מ״ר · קומה 1</p>
+      <p class="lo">נחל ערוגות, באר שבע</p>
+      <p class="ag2">הסוכנת: נופר הרוש</p>
+      <div class="acts"><a class="btn" href="https://nexa.co.il/he/sale/beer-sheva-apartment-vz2jdi" target="_blank" rel="noopener">לצפייה בנכס</a><a class="btn ghost" href="#homes" id="moreHomes">לנכסים נוספים</a></div>
+      <a class="vid" href="https://www.youtube.com/shorts/Gj0-y7XYk4w" target="_blank" rel="noopener">▶ סרטון הנכס</a>
+    </div>
+    <p class="pcred">צילומי הנכס מתוך המודעה ב-Nexa</p>
+  </section>
+
+  <section class="ch c5" id="city-ch" aria-label="באר שבע במספרים">
+    <p class="kick lat">From above · Beer Sheva</p>
+    <h2 class="ch5h"><span class="mask"><span><b id="cnt">265</b> נכסים פעילים.</span></span><span class="mask"><span>עיר אחת.</span></span></h2>
+    <div class="idx" id="idx"><div class="hd lat"><span>שכונה</span><span>נכסים</span><span>חציון מבוקש*</span></div></div>
+    <p class="note">* חציון המחיר המבוקש לפי הנכסים הפעילים של המשרד ב-Nexa, נובמבר 2026. לא מחיר עסקה.</p>
+    <p class="credit lat">Aerial photo: Amos Meron · CC BY-SA 3.0 · Wikimedia Commons</p>
+  </section>
+
+  <section class="ch c6" id="team" aria-label="הצוות">
+    <p class="kick lat">The team · REMAX Beer Sheva</p>
+    <h2 class="ch6h"><span class="mask"><span>64 אנשי מקצוע.</span></span><span class="mask"><span>משרד אחד.</span></span></h2>
+    <div class="ribbon" id="ribbon"></div>
+    <div class="tframe" id="tframe">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect class="b" x="0" y="0" width="100" height="100" vector-effect="non-scaling-stroke"/></svg>
+      <span class="tcount lat" id="tcount">01</span>
+      <div class="tlabel"><b id="tname"></b><span id="tmeta"></span></div>
+    </div>
+    <a class="more" href="https://nexa.co.il/he/agency/remax-plus" target="_blank" rel="noopener">לכל הצוות ב-Nexa ←</a>
+  </section>
+
+  <section class="ch c7" id="homes" aria-label="נכסים נבחרים">
+    <p class="kick">עוד נכסים נבחרים · 6 מתוך 265</p>
+    <div class="magp" id="magp"></div>
+    <div class="magbar"><i id="magbar"></i></div>
+    <div class="magi" id="magi"></div>
+    <a class="more" href="https://nexa.co.il/he/agency/remax-plus" target="_blank" rel="noopener">לכל 265 הנכסים ←</a>
+  </section>
+
+  <section class="ch c9" id="more" aria-label="יותר ממשרד תיווך">
+    <p class="kick lat">More than a brokerage · REMAX Beer Sheva</p>
+    <h2 class="ch9h"><span class="mask"><span>יותר ממשרד</span></span><span class="mask"><span>תיווך.</span></span></h2>
+    <div class="stats">
+      <div><b>20+</b><span>שנות פעילות בנגב</span></div>
+      <div><b>64</b><span>סוכנים ואנשי מקצוע</span></div>
+      <div><b>750+</b><span>נכסים בניהול המשרד</span></div>
+    </div>
+    <article class="pn" id="invest" aria-label="מחלקת השקעות">
+      <p class="pk lat">01 · Investments · מחלקת השקעות</p>
+      <h3 class="pt">אין לכם הון עצמי?<br>יש לכם תוכנית.</h3>
+      <p class="pd">מחלקת ההשקעות של המשרד מאתרת דירות במחיר של עד 700 אלף ₪, מתחת למחיר השוק, ומלווה אתכם לאורך כל הדרך: מימון, עו״ד, שיפוץ, השכרה ומכירה.</p>
+      <ul class="pf"><li><b>10</b><span>שירותים תחת קורת גג אחת</span></li><li><b>1</b><span>איש קשר מהיום הראשון ועד המכירה</span></li><li><b>18</b><span>חודשים מקנייה למכירה, בתרחיש לדוגמה</span></li></ul>
+      <div class="pa"><a class="btn" href="https://invest.remaxb7.co.il/" target="_blank" rel="noopener">למחלקת ההשקעות</a><a class="btn ghost" href="https://wa.me/972544442814?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20%D7%94%D7%94%D7%A9%D7%A7%D7%A2%D7%95%D7%AA" target="_blank" rel="noopener">WhatsApp למחלקה</a></div>
+      <p class="note">תרחיש להמחשה ולא התחייבות לרווח. כמו בכל השקעה ממונפת, קיים גם סיכון.</p>
+    </article>
+    <article class="pn" id="academy" aria-label="האקדמיה">
+      <p class="pk lat">02 · Academy · האקדמיה של המשרד</p>
+      <h3 class="pt">מאפס לסוכן<br>עם רישיון.</h3>
+      <p class="pd">אנחנו מכשירים את הסוכנים שלנו בעצמנו: קורס במשרד עם סוכנים פעילים, הכנה למבחן רשם המתווכים, ומי שעובר אותו מצטרף לצוות.</p>
+      <ul class="pf"><li class="hot"><b>11.26</b><span>מחזור נובמבר 2026 · 10 מפגשים</span></li><li><b>01.27</b><span>מחזור ינואר 2027 · 6 מפגשים</span></li><li><b>3</b><span>שלבים: הכשרה, מבחן רישוי, הצטרפות לצוות</span></li></ul>
+      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A1%D7%95%D7%9B%D7%A0%D7%99%20%D7%94%D7%A0%D7%93%D7%9C%D7%B4%D7%9F" target="_blank" rel="noopener">שריינו מקום בקורס</a><small>תאריכים, מחיר ופרטי המבחן ב-WhatsApp</small></div>
+    </article>
+    <article class="pn" id="careers" aria-label="גיוס סוכנים">
+      <p class="pk lat">03 · Careers · גיוס סוכנים</p>
+      <h3 class="pt">כבר עם רישיון?<br>בואו לליגה הבאה.</h3>
+      <p class="pd">אצלנו אתם עצמאיים, אבל לא לבד: מותג בינלאומי, מערכות, הכשרה מתמשכת וקהילה של עשרות סוכנים שעובדים יחד.</p>
+      <ul class="pf"><li><b>110+</b><span>מדינות שבהן פועלת רשת REMAX</span></li><li><b>750+</b><span>נכסים בניהול המשרד, שאפשר לעבוד איתם מהיום הראשון</span></li><li><b>Nexa</b><span>CRM, פרסום נכסים, הערכות שווי ולידים במקום אחד</span></li></ul>
+      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A0%D7%99%20%D7%A1%D7%95%D7%9B%D7%9F/%D7%AA%20%D7%A2%D7%9D%20%D7%A8%D7%99%D7%A9%D7%99%D7%95%D7%9F%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">קבעו שיחת היכרות</a><small>20 דקות עם הנהלת המשרד, בדיסקרטיות מלאה</small></div>
+      <div class="qt"><img src="assets/team/a14.webp" alt="שי שטרן" loading="lazy" decoding="async"><p>הצלחה אמיתית לא נמדדת רק בכמות הנכסים או העסקאות. היא נמדדת ביכולת לבנות אנשים.<cite>שי שטרן, בעלים ומנהל המשרד</cite></p></div>
+    </article>
+  </section>
+
+  <section class="ch c10" id="reviews" aria-label="ביקורות ב-Google">
+    <p class="kick lat">Google reviews · REMAX Beer Sheva</p>
+    <div class="rate">
+      <b id="rnum">4.8</b>
+      <div class="stars" aria-label="4.8 מתוך 5"><i style="--f:.96"></i></div>
+      <p>149 ביקורות ב-Google</p>
+      <a href="https://maps.google.com/?cid=12919943571194793601" target="_blank" rel="noopener">לכל הביקורות ב-Google ←</a>
+    </div>
+    <div class="quotes" id="quotes"></div>
+    <div class="qbar"><i id="qbar"></i></div>
+    <p class="qnote">קטעים מתוך ביקורות של לקוחות בדף העסק ב-Google. הדירוג ומספר הביקורות נכונים ל-5 בנובמבר 2026.</p>
+  </section>
+
+  <section class="ch c4" id="contact" aria-label="צרו קשר">
+    <p class="k lat">Contact · REMAX Beer Sheva</p>
+    <h2><span class="mask"><span>נדבר על</span></span><span class="mask"><span>נדל״ן?</span></span></h2>
+    <div class="row">
+      <a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A2%D7%96%D7%A8%D7%94%20%D7%91%D7%9E%D7%9B%D7%99%D7%A8%D7%94%20%D7%90%D7%95%20%D7%91%D7%94%D7%A9%D7%9B%D7%A8%D7%94%20%D7%A9%D7%9C%20%D7%A0%D7%9B%D7%A1" target="_blank" rel="noopener">למכור או להשכיר נכס</a>
+      <a class="btn ghost" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A2%D7%96%D7%A8%D7%94%20%D7%91%D7%97%D7%99%D7%A4%D7%95%D7%A9%20%D7%A0%D7%9B%D7%A1%20%D7%9C%D7%A7%D7%A0%D7%99%D7%99%D7%94%20%D7%90%D7%95%20%D7%9C%D7%A9%D7%9B%D7%99%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">לקנות או לשכור נכס</a>
+      <span class="addr">יצחק נפחא 25, באר שבע · <span class="lat">050-559-9259</span></span>
+    </div>
+    <p class="cred">© 2026 REMAX באר שבע · חזון שיא בע״מ · כל משרד REMAX בבעלות ובניהול עצמאיים<br><span class="lat">Prototype v0.8 · 3D scans: Poly Haven (CC0) · Sofa: Wayfair (CC BY 4.0) · Chair: Wayfair (CC0) · Data &amp; listing photos: Nexa</span></p>
+  </section>
+</div>
+
+<div class="layer" id="chrome">
+  <header class="nav">
+    <a class="logo" href="#" aria-label="REMAX באר שבע"><span class="dot"></span><svg class="mini" viewBox="0 0 220 60" aria-hidden="true"><g><path fill="currentColor" d="M14.4,31c-.5,0-.9-.3-1.3-.6-2.4-2-6.6-5.7-8.2-7.8-1.4-1.7-2.7-3.3-3.3-5.4-.4-1.2-.5-2.4-.5-3.6s.3-3.2.9-4.7C4,4,8.9.8,14.4.8s10.4,3.2,12.4,8.2c.6,1.5.9,3.1.9,4.7s-.2,2.4-.5,3.6c-.6,2-1.8,3.6-3.3,5.4-1.7,2-5.9,5.7-8.2,7.7-.4.3-.8.6-1.3.6Z"/><path style="fill:var(--bg)" d="M26.2,9.2H2.6c-.6,1.4-.9,2.9-.9,4.4s.2,2.3.5,3.4h24.3c.3-1.1.5-2.2.5-3.4s-.3-3.1-.9-4.4Z"/><path fill="currentColor" d="M14.4,1.5c-5.4,0-10,3.2-11.8,7.7h23.6c-1.8-4.5-6.4-7.7-11.8-7.7Z"/><path fill="currentColor" d="M2.2,17.1c.6,2,1.9,3.6,3.2,5.2,1.7,2.1,6.4,6.2,8.2,7.8h0c.2.2.5.4.8.4s.5-.2.8-.4h0c1.8-1.6,6.5-5.7,8.2-7.8,1.3-1.6,2.6-3.2,3.2-5.2H2.2Z"/><path fill="currentColor" d="M26.2,9.2h-11.8V3.6c0-1.2,1.1-2.1,2.3-1.9,4.4.8,8,3.7,9.5,7.5Z"/><path fill="currentColor" d="M26.5,17.1c-.6,2-1.9,3.6-3.2,5.2-1.7,2.1-6.4,6.2-8.2,7.8h0c-.2.2-.5.4-.8.4v-11.3c0-1.1.9-2,2-2h10.1Z"/></g><g fill="currentColor"><path d="M51.2,34.7c-1,.9-2.7,1.4-5.1,1.4h-5.7v-10.7h5.6c2.5,0,4.2.4,5.2,1.3,1,.9,1.5,2.2,1.5,4s-.5,3.2-1.5,4.1ZM56.9,42.2c4.3-2.5,6.5-6.5,6.5-12s-1.3-7.4-4-9.8c-2.7-2.4-6.9-3.6-12.8-3.6h-17v42.3h10.7v-14.6h6.6l7.1,14.6h11.7l-8.8-17Z"/><path d="M94.9,25.7v-8.9h-29.2v42.3h15.7l4.6-8.9h-9.2v-8.1h13.4l4.7-9h-18.1v-7.5h18.1Z"/><path d="M199.9,37.3l12.6-20.5h-12.1l-7.2,12.9-7.2-12.9h-12.6l12.6,20.1-8.6,14-11.6-34.1h-13.7l-12.3,35.9V16.8h-13l-9.4,28.6-9.4-28.6h-4.6l-8.5,16.4v26h10.1v-25l8.1,25h8.1l8.2-25.1v25.1h19.4l2.6-8.1h14.7l2.5,8.1h0s0,0,0,0h15.8l8.2-14.8,8.8,14.8h12.7l-14.3-21.8ZM154.1,42l4.7-15.8,4.7,15.8h-9.5Z"/><path d="M218.8,18.6c0,1.1-.8,1.8-1.8,1.8s-1.8-.7-1.8-1.8.8-1.8,1.8-1.8,1.8.7,1.8,1.8ZM218.5,18.6c0-.9-.7-1.5-1.4-1.5s-1.4.6-1.4,1.5.7,1.5,1.4,1.5,1.4-.6,1.4-1.5ZM217.5,18.7l.4.8h-.5l-.4-.7h-.2v.7h-.5v-1.9h.8c.5,0,.7.2.7.6s-.1.4-.4.5ZM216.8,18.4h.3c.2,0,.3,0,.3-.3s-.1-.3-.3-.3h-.3v.5Z"/></g></svg></a>
+    <nav class="links" id="links" aria-label="ניווט">
+      <a href="#homes" data-go="962">נכסים</a><a href="#team" data-go="1560">הצוות</a><a href="#invest" data-go="1836">השקעות</a><a href="#academy" data-go="1926">אקדמיה</a><a href="#careers" data-go="2016">קריירה</a><a href="#reviews" data-go="2150">ביקורות</a><a href="#contact" data-go="2482">צרו קשר</a>
+    </nav>
+    <div class="mob">
+      <a class="wa" href="https://wa.me/972505599259" aria-label="WhatsApp למשרד">WhatsApp</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="links" aria-label="תפריט"><i></i><i></i></button>
+    </div>
+  </header>
+  <div class="cue" aria-hidden="true"><span class="r"><svg viewBox="0 0 10 10" fill="none"><path d="M2 3.6 L5 6.6 L8 3.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+</div>
+
+<div id="pre"><canvas id="prec"></canvas></div>
+<div id="spacer"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+
+gsap.registerPlugin(ScrollTrigger);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const Q = new URLSearchParams(location.search);
+const SKIP = Q.has('skip');
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOBILE = matchMedia('(max-aspect-ratio: 1/1)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
+window.__booted = true;
+if (Q.has('freeze')) setTimeout(() => gsap.globalTimeline.pause(), +Q.get('freeze') * 1000);
+
+/* ================================================================
+   RENDERER / SCENE
+   ================================================================ */
+const canvas = $('#gl');
+let renderer;
+try { if (Q.has('nogl')) throw new Error('forced fallback'); renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, alpha: true, powerPreference: 'high-performance' }); if (!renderer.getContext()) throw new Error('no gl'); }
+catch (e) { window.__fallback && window.__fallback(); throw e; }
+let DPR = Math.min(window.devicePixelRatio || 1, MOBILE ? 1.5 : 1.75);
+renderer.setPixelRatio(DPR);
+renderer.setClearColor(0x000000, 0);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.0;
+const MAXANI = renderer.capabilities.getMaxAnisotropy();
+const LOAD = { done: 0, total: 1 };
+const manager = new THREE.LoadingManager();
+manager.onProgress = (u, l, t) => { LOAD.done = l; LOAD.total = t; };
+const gltfLoader = new GLTFLoader(manager).setMeshoptDecoder(MeshoptDecoder);
+const texLoader = new THREE.TextureLoader(manager);
+const A = {};   // loaded scenes
+const GLBS = ['GlamVelvetSofa', 'SheenChair', 'modern_wooden_cabinet', 'modern_coffee_table_01', 'mid_century_lounge_chair', 'potted_plant_02', 'potted_plant_04',
+  'wooden_table_02', 'dining_chair_02', 'outdoor_table_chair_set_01', 'side_table_01', 'throw_pillows_01', 'measuring_tape_01', 'round_spectacles', 'stationery_supplies'];
+// assets ship as base64 packs (own files), parsed in memory: no network fetches needed
+const PACKS = 5; let packsDone = 0;
+const PACK_FAILED = [];
+function loadScript(src, tries = 2) {
+  return new Promise(r => {
+    const go = left => { const el = document.createElement('script'); el.src = src + (left < tries ? `?retry=${left}` : '');
+      el.onload = () => { packsDone++; r(true); };
+      el.onerror = () => { el.remove(); if (left > 1) setTimeout(() => go(left - 1), 800); else { PACK_FAILED.push(src); packsDone++; console.warn('pack failed', src); r(false); } };
+      document.head.appendChild(el); };
+    go(tries);
+  });
+}
+const packsP = Promise.all([...Array(PACKS)].map((_, i) => loadScript(`assets/pack/p${i}.js`)));
+const b64 = s => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer; };
+try { window.createImageBitmap = undefined; } catch (e) {}  // force <img> decoding (blob: URLs) for embedded textures
+async function loadGLB(n) {
+  await packsP;
+  const data = window.__A && window.__A[n]; if (!data) { console.warn('missing pack', n); return; }
+  try {
+    const g = await gltfLoader.parseAsync(b64(data), '');
+    const root = g.scene; const rm = [];
+    root.traverse(o => { if (o.isLight) rm.push(o); if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    rm.forEach(o => o.parent.remove(o));
+    const ext = g.parser.json.extensions && g.parser.json.extensions.KHR_materials_variants;
+    if (ext) {
+      const vi = ext.variants.findIndex(v => /navy/i.test(v.name));
+      if (vi >= 0) {
+        const jobs = [];
+        root.traverse(o => { const m = o.userData && o.userData.gltfExtensions && o.userData.gltfExtensions.KHR_materials_variants; if (o.isMesh && m) { const map = m.mappings.find(mm => mm.variants.includes(vi)); if (map) jobs.push(g.parser.getDependency('material', map.material).then(mat => { o.material = mat; })); } });
+        await Promise.all(jobs);
+      }
+    }
+    A[n] = root; delete window.__A[n];
+  } catch (e) { console.warn('asset failed', n, e); }
+}
+function pbr(name, res, opts = {}) {
+  const base = `assets/tex/${name}_`;
+  const t = (k, srgb) => { const x = texLoader.load(`${base}${k}_${res}.webp`); x.wrapS = x.wrapT = THREE.RepeatWrapping; x.anisotropy = MAXANI; if (srgb) x.colorSpace = THREE.SRGBColorSpace; return x; };
+  return new THREE.MeshStandardMaterial({ map: t('Diffuse', true), roughnessMap: t('Rough'), normalMap: t('nor_gl'), roughness: 1, metalness: 0, ...opts });
+}
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+packsP.then(() => {
+  const d = window.__A && window.__A.lebombo; if (!d) return;
+  try {
+    const ld = new RGBELoader(); ld.setDataType(THREE.HalfFloatType); const td = ld.parse(b64(d));
+    const hdr = new THREE.DataTexture(td.data, td.width, td.height, THREE.RGBAFormat, td.type);
+    hdr.colorSpace = THREE.LinearSRGBColorSpace; hdr.minFilter = hdr.magFilter = THREE.LinearFilter; hdr.generateMipmaps = false; hdr.flipY = true; hdr.needsUpdate = true;
+    hdr.mapping = THREE.EquirectangularReflectionMapping; scene.environment = pmrem.fromEquirectangular(hdr).texture; hdr.dispose(); delete window.__A.lebombo;
+  } catch (e) { console.warn('hdr failed', e); }
+});
+scene.environmentRotation = new THREE.Euler(0, 1.1, 0);
+scene.environmentIntensity = 0.5;
+
+const camera = new THREE.PerspectiveCamera(26, innerWidth / innerHeight, 0.5, 400);
+
+const hemi = new THREE.HemisphereLight(0xE6EEF8, 0x1A2348, 0.4);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xFFF3E4, 2.6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(MOBILE ? 1024 : 2048, MOBILE ? 1024 : 2048);
+sun.shadow.bias = -0.00025;
+sun.shadow.normalBias = 0.02;
+const sc = sun.shadow.camera; sc.left = -24; sc.right = 24; sc.top = 24; sc.bottom = -24; sc.near = 1; sc.far = 90;
+scene.add(sun, sun.target);
+const rim = new THREE.DirectionalLight(0xA3D4F2, 0);
+scene.add(rim, rim.target);
+
+/* ================================================================
+   HELPERS
+   ================================================================ */
+function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+function tex(c, srgb = true) {
+  const t = new THREE.CanvasTexture(c);
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = MAXANI; t.needsUpdate = true; return t;
+}
+function noise(g, w, h, amt, alpha = 1) {
+  const id = g.getImageData(0, 0, w, h), d = id.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (Math.random() - .5) * amt; d[i] += n; d[i + 1] += n; d[i + 2] += n; d[i + 3] *= alpha; }
+  g.putImageData(id, 0, 0);
+}
+const M = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: .9, metalness: 0, ...o });
+const PH = () => { const [c, g] = mkCanvas(2, 2); g.fillStyle = '#fff'; g.fillRect(0, 0, 2, 2); return tex(c); };
+
+/* ================================================================
+   PLAN DATA  (metres; model is 1:50, scene units = model metres)
+   ================================================================ */
+const EXT = .25, INT = .12, MMD = .30, WH = 2.6;
+const PLAN = { x0: -6.125, x1: 6.125, z0: -4.525, z1: 6.2 };
+const PCZ = (PLAN.z0 + PLAN.z1) / 2;  // plan centre (z)
+const walls = [];
+const W = (a, b, t, ops = [], ext = 0, kind = 'int') => walls.push({ a, b, t, ops, ext, kind });
+// exterior
+W([-6, -4.4], [6, -4.4], EXT, [
+  { at: -4.35, w: 1.0, s: 1.0, h: 2.0, win: 1 }, { at: -1.2, w: 1.5, s: .9, h: 2.2, win: 1 },
+  { at: 1.5, w: .6, s: 1.5, h: 2.1, win: 1 }, { at: 3.3, w: .6, s: 1.5, h: 2.1, win: 1 }, { at: 5.1, w: 1.2, s: .9, h: 2.2, win: 1 }], EXT / 2, 'ext');
+W([-6, 4.4], [6, 4.4], EXT, [{ at: -3.1, w: 4.6, s: 0, h: 2.4, slide: 1 }, { at: 4.25, w: 1.6, s: 1.05, h: 2.2, win: 1 }], EXT / 2, 'ext');
+W([-6, -4.4], [-6, 4.4], EXT, [{ at: .55, w: 1.0, s: 0, h: 2.15, door: { hinge: 'a', side: 1, red: 1 } }, { at: 2.9, w: 1.2, s: .9, h: 2.2, win: 1 }], -EXT / 2, 'ext');
+W([6, -4.4], [6, 4.4], EXT, [{ at: -1.6, w: 1.6, s: .9, h: 2.2, win: 1 }], -EXT / 2, 'ext');
+// interior
+W([-6, -.6], [-2.6, -.6], MMD, [{ at: -4.1, w: .9, s: 0, h: 2.1, door: { hinge: 'b', side: 1, mmd: 1 } }], 0, 'mmd');
+W([-2.6, -.6], [.6, -.6], INT, [{ at: -.9, w: .85, s: 0, h: 2.1, door: { hinge: 'a', side: -1 } }]);
+W([-2.6, -4.4], [-2.6, -.6], MMD, [], 0, 'mmd');
+W([.6, -4.4], [.6, -.6], INT);
+W([.6, -2.0], [2.4, -2.0], INT, [{ at: 1.5, w: .75, s: 0, h: 2.1, door: { hinge: 'a', side: -1 } }]);
+W([2.4, -4.4], [2.4, 1.0], INT, [{ at: -1.3, w: .85, s: 0, h: 2.1, door: { hinge: 'b', side: 1 } }]);
+W([2.4, -2.2], [4.2, -2.2], INT, [{ at: 3.3, w: .7, s: 0, h: 2.1, door: { hinge: 'b', side: -1 } }]);
+W([4.2, -4.4], [4.2, -2.2], INT);
+W([2.4, 1.0], [6, 1.0], INT);
+
+const rooms = [
+  { n: 'סלון ופינת אוכל', a: '42.0', r: [-6, -.6, 2.4, 4.4], f: 'tile', l: [-2.6, 3.72] },
+  { n: 'מטבח', a: '12.2', r: [2.4, 1.0, 6, 4.4], f: 'tile', l: [3.45, 3.28] },
+  { n: 'חדר הורים', a: '15.5', r: [2.4, -2.2, 6, 1.0], f: 'oak', l: [3.0, -1.0] },
+  { n: '', a: '', r: [4.2, -4.4, 6, -2.2], f: 'oak' },
+  { n: 'רחצה', a: '4.3', r: [.6, -4.4, 2.4, -2.0], f: 'tile30', l: [1.5, -3.18] },
+  { n: 'מקלחת', a: '4.0', r: [2.4, -4.4, 4.2, -2.2], f: 'tile30', l: [2.98, -2.86] },
+  { n: 'חדר שינה', a: '12.2', r: [-2.6, -4.4, .6, -.6], f: 'oak', l: [-.5, -1.45] },
+  { n: 'ממ״ד', a: '12.9', r: [-6, -4.4, -2.6, -.6], f: 'oak', l: [-3.7, -1.5] },
+  { n: '', a: '', r: [.6, -2.0, 2.4, -.6], f: 'tile' },
+  { n: 'מרפסת', a: '12.6', r: [-6, 4.4, 1, 6.2], f: 'deck', l: [-4.9, 5.7] },
+];
+
+/* ================================================================
+   WORLD: desk, mat, shadow catcher
+   ================================================================ */
+const world = new THREE.Group(); scene.add(world);
+
+// desk (slate concrete)
+function deskTexture() {
+  const S = 1024, [c, g] = mkCanvas(S, S);
+  g.fillStyle = '#4B505C'; g.fillRect(0, 0, S, S);
+  for (let i = 0; i < 160; i++) {
+    const x = Math.random() * S, y = Math.random() * S, r = 40 + Math.random() * 220, a = Math.random() * .07;
+    const gr = g.createRadialGradient(x, y, 0, x, y, r);
+    const l = Math.random() > .5 ? '255,255,255' : '0,0,10';
+    gr.addColorStop(0, `rgba(${l},${a})`); gr.addColorStop(1, `rgba(${l},0)`);
+    g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  for (let i = 0; i < 2600; i++) { g.fillStyle = `rgba(${Math.random() > .5 ? '255,255,255' : '0,0,0'},${Math.random() * .1})`; g.fillRect(Math.random() * S, Math.random() * S, 1 + Math.random() * 1.6, 1 + Math.random() * 1.6); }
+  noise(g, S, S, 14);
+  const t = tex(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(5, 4); return t;
+}
+const deskMat = pbr('oak_veneer_01', '2k', { transparent: true, color: '#E8DCCB' }); [deskMat.map, deskMat.roughnessMap, deskMat.normalMap].forEach(t => t.repeat.set(4.2, 3.15)); deskMat.normalScale.set(.6, .6);
+const desk = new THREE.Mesh(new THREE.PlaneGeometry(160, 120), deskMat);
+desk.rotation.x = -Math.PI / 2; desk.position.y = -.14; desk.receiveShadow = true;
+world.add(desk);
+
+// cutting mat 90 x 60 cm  ->  45 x 30 units
+const MAT_W = 45, MAT_H = 30;
+function matTexture() {
+  const Wp = 4096, Hp = Math.round(Wp * MAT_H / MAT_W), [c, g] = mkCanvas(Wp, Hp);
+  const ppc = Wp / 90; // px per cm
+  g.fillStyle = '#08173F'; g.fillRect(0, 0, Wp, Hp);
+  noise(g, Wp, Hp, 7);
+  const ins = 1.5 * ppc, cols = 87, rows = 57;
+  const gx = i => ins + i * ppc, gy = j => ins + j * ppc;
+  // minor + major
+  for (let i = 0; i <= cols; i++) {
+    const major = i % 5 === 0; g.strokeStyle = major ? 'rgba(163,212,242,.30)' : 'rgba(163,212,242,.12)'; g.lineWidth = major ? 2.4 : 1.4;
+    g.beginPath(); g.moveTo(gx(i), gy(0)); g.lineTo(gx(i), gy(rows)); g.stroke();
+  }
+  for (let j = 0; j <= rows; j++) {
+    const major = j % 5 === 0; g.strokeStyle = major ? 'rgba(163,212,242,.30)' : 'rgba(163,212,242,.12)'; g.lineWidth = major ? 2.4 : 1.4;
+    g.beginPath(); g.moveTo(gx(0), gy(j)); g.lineTo(gx(cols), gy(j)); g.stroke();
+  }
+  // half-cm ticks along the border of the grid
+  g.strokeStyle = 'rgba(163,212,242,.5)'; g.lineWidth = 1.6;
+  for (let i = 0; i <= cols * 2; i++) { const x = ins + i * ppc / 2, L = i % 2 ? .25 * ppc : .45 * ppc; g.beginPath(); g.moveTo(x, gy(rows)); g.lineTo(x, gy(rows) + L); g.moveTo(x, gy(0)); g.lineTo(x, gy(0) - L); g.stroke(); }
+  for (let j = 0; j <= rows * 2; j++) { const y = ins + j * ppc / 2, L = j % 2 ? .25 * ppc : .45 * ppc; g.beginPath(); g.moveTo(gx(cols), y); g.lineTo(gx(cols) + L, y); g.moveTo(gx(0), y); g.lineTo(gx(0) - L, y); g.stroke(); }
+  // 45° / 60° guides from bottom-right corner
+  g.save(); g.strokeStyle = 'rgba(163,212,242,.16)'; g.lineWidth = 1.6; g.setLineDash([10, 9]);
+  const cx = gx(cols), cy = gy(rows);
+  [45, 60, 30].forEach(a => { const r = a * Math.PI / 180; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx - Math.cos(r) * 40 * ppc, cy - Math.sin(r) * 40 * ppc); g.stroke(); });
+  g.setLineDash([]); g.beginPath(); g.arc(cx, cy, 18 * ppc, Math.PI, Math.PI * 1.5); g.stroke(); g.restore();
+  g.fillStyle = 'rgba(163,212,242,.55)'; g.font = `600 ${ppc * .55}px "Barlow Condensed"`; g.textAlign = 'center';
+  [[45, 19.5], [60, 19.5], [30, 19.5]].forEach(([a, r]) => { const rr = a * Math.PI / 180; g.fillText(a + '°', cx - Math.cos(rr) * r * ppc - ppc * .3, cy - Math.sin(rr) * r * ppc + ppc * .2); });
+  // numbers (cm) along all edges
+  g.fillStyle = 'rgba(163,212,242,.78)'; g.font = `600 ${ppc * .52}px "Barlow Condensed"`; g.textBaseline = 'middle';
+  for (let i = 0; i <= cols; i++) { g.textAlign = 'center'; g.fillText(String(i), gx(i), gy(rows) + ppc * .95); g.fillText(String(i), gx(i), gy(0) - ppc * .95); }
+  for (let j = 0; j <= rows; j++) { const v = String(rows - j); g.textAlign = 'center'; g.fillText(v, gx(cols) + ppc * .95, gy(j)); g.fillText(v, gx(0) - ppc * .95, gy(j)); }
+  // imprint
+  g.fillStyle = 'rgba(163,212,242,.62)'; g.textAlign = 'right'; g.textBaseline = 'alphabetic';
+  g.font = `700 ${ppc * .7}px "Barlow Condensed"`; g.fillText('REMAX  ·  SELF-HEALING CUTTING MAT', gx(cols) - ppc * .35, gy(0) + ppc * 1.15);
+  g.font = `600 ${ppc * .48}px "Barlow Condensed"`; g.fillText('A1  ·  900 × 600 MM  ·  BEER SHEVA OFFICE', gx(cols) - ppc * .35, gy(0) + ppc * 1.9);
+  return tex(c);
+}
+const matMat = M('#ffffff', { roughness: .74, transparent: true, map: PH() });
+const matSide = M('#09163C', { transparent: true });
+const mat = new THREE.Group();
+const matBody = new THREE.Mesh(new RoundedBoxGeometry(MAT_W, .12, MAT_H, 2, .04), matSide);
+matBody.position.y = -.06; matBody.castShadow = true; matBody.receiveShadow = true; mat.add(matBody);
+const matTop = new THREE.Mesh(new THREE.PlaneGeometry(MAT_W - .02, MAT_H - .02), matMat);
+matTop.rotation.x = -Math.PI / 2; matTop.position.y = .001; matTop.receiveShadow = true; mat.add(matTop);
+world.add(mat);
+
+// shadow catcher for dark / light chapters
+const catcherMat = new THREE.ShadowMaterial({ color: 0x000014, opacity: 0, transparent: true });
+const catcher = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), catcherMat);
+catcher.rotation.x = -Math.PI / 2; catcher.position.y = .002; catcher.receiveShadow = true; catcher.renderOrder = 1;
+scene.add(catcher);
+
+/* ================================================================
+   THE MODEL
+   ================================================================ */
+const pivot = new THREE.Group(); scene.add(pivot);
+const model = new THREE.Group(); model.position.set(0, .15, -PCZ); pivot.add(model);
+
+const mWall = M('#F8F6F1', { roughness: .93 });
+const mWallMmd = M('#E9E6DF', { roughness: .95 });
+const mSlab = M('#E8E4DA', { roughness: .95 });
+const mFurn = M('#E4E0D6');
+const mSoft = M('#D8DDE6', { roughness: .97 });
+const mBalsa = M('#E3D3B4', { roughness: .85 });
+const mFrame = M('#2A3452', { roughness: .5, metalness: .2 });
+const mGlass = new THREE.MeshStandardMaterial({ color: '#A3D4F2', roughness: .08, metalness: 0, transparent: true, opacity: .32, depthWrite: false });
+const mRed = M('#AA1120', { roughness: .55 });
+const mSteel = M('#C9CDD4', { roughness: .35, metalness: .85 });
+
+const GS = { value: 1 };
+function monoify(m) {
+  if (!m || m.userData.mono || m === portalMat) return; m.userData.mono = true;
+  m.onBeforeCompile = sh => {
+    sh.uniforms.uGS = GS;
+    sh.fragmentShader = 'uniform float uGS;\n' + sh.fragmentShader.replace('#include <dithering_fragment>',
+      '#include <dithering_fragment>\n  gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(dot(gl_FragColor.rgb, vec3(.2126, .7152, .0722))), uGS);');
+  };
+  m.customProgramCacheKey = () => 'mono'; m.needsUpdate = true;
+}
+const shadowy = o => { o.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } }); return o; };
+
+// slabs
+const slab = new THREE.Mesh(new THREE.BoxGeometry(PLAN.x1 - PLAN.x0, .15, 4.525 * 2), mSlab);
+slab.position.set(0, -.075, 0); model.add(shadowy(slab));
+const bslab = new THREE.Mesh(new THREE.BoxGeometry(7.0, .13, 6.2 - 4.525), mSlab);
+bslab.position.set(-2.5, -.085, (6.2 + 4.525) / 2); model.add(shadowy(bslab));
+
+// floor texture plane + labels plane
+const PPU = 160;
+const FW = PLAN.x1 - PLAN.x0, FH = PLAN.z1 - PLAN.z0;
+const fx = x => (x - PLAN.x0) * PPU, fz = z => (z - PLAN.z0) * PPU;
+function floorTexture() {
+  const [c, g] = mkCanvas(Math.round(FW * PPU), Math.round(FH * PPU));
+  g.fillStyle = '#EAE5DA'; g.fillRect(fx(PLAN.x0), fz(PLAN.z0), FW * PPU, 9.05 * PPU);
+  g.fillStyle = '#E9E2D3'; g.fillRect(fx(-6), fz(4.525), 7 * PPU, (6.2 - 4.525) * PPU);
+  rooms.forEach(r => {
+    const [x0, z0, x1, z1] = r.r; g.save(); g.beginPath(); g.rect(fx(x0), fz(z0), (x1 - x0) * PPU, (z1 - z0) * PPU); g.clip();
+    if (r.f === 'oak') { g.fillStyle = '#E9E0CE'; g.fillRect(fx(x0), fz(z0), (x1 - x0) * PPU, (z1 - z0) * PPU); }
+    g.strokeStyle = 'rgba(0,14,53,.07)'; g.lineWidth = 1.2;
+    const step = r.f === 'tile' ? .6 : r.f === 'tile30' ? .3 : r.f === 'deck' ? .14 : .18;
+    if (r.f === 'tile' || r.f === 'tile30') {
+      for (let x = Math.ceil(x0 / step) * step; x < x1; x += step) { g.beginPath(); g.moveTo(fx(x), fz(z0)); g.lineTo(fx(x), fz(z1)); g.stroke(); }
+      for (let z = Math.ceil(z0 / step) * step; z < z1; z += step) { g.beginPath(); g.moveTo(fx(x0), fz(z)); g.lineTo(fx(x1), fz(z)); g.stroke(); }
+    } else {
+      // planks running along x, staggered joints
+      for (let z = z0, k = 0; z < z1; z += step, k++) {
+        g.beginPath(); g.moveTo(fx(x0), fz(z)); g.lineTo(fx(x1), fz(z)); g.stroke();
+        for (let x = x0 + ((k * .53) % 1.2); x < x1; x += 1.2) { g.beginPath(); g.moveTo(fx(x), fz(z)); g.lineTo(fx(x), fz(z + step)); g.stroke(); }
+      }
+    }
+    g.restore();
+  });
+  noise(g, c.width, c.height, 6);
+  return tex(c);
+}
+function labelsTexture(rot = 0) {
+  const [c, g] = mkCanvas(Math.round(FW * PPU), Math.round(FH * PPU));
+  g.clearRect(0, 0, c.width, c.height);
+  // door swings (dashed arcs)
+  g.strokeStyle = 'rgba(0,14,53,.38)'; g.lineWidth = 1.6; g.setLineDash([6, 6]);
+  walls.forEach(w => w.ops.forEach(o => {
+    if (!o.door) return;
+    const horiz = w.a[1] === w.b[1]; const fixed = horiz ? w.a[1] : w.a[0];
+    const hp = o.door.hinge === 'a' ? o.at - o.w / 2 : o.at + o.w / 2;
+    const dir = o.door.hinge === 'a' ? 1 : -1, sd = o.door.side;
+    const R = (o.w - .05) * PPU, off = w.t / 2 * sd;
+    let cx, cy, a0, a1;
+    if (horiz) { cx = fx(hp); cy = fz(fixed + off); a0 = dir > 0 ? 0 : Math.PI; a1 = sd > 0 ? Math.PI / 2 : -Math.PI / 2; }
+    else { cx = fx(fixed + off); cy = fz(hp); a0 = dir > 0 ? Math.PI / 2 : -Math.PI / 2; a1 = sd > 0 ? 0 : Math.PI; }
+    let d = a1 - a0; while (d > Math.PI) d -= Math.PI * 2; while (d <= -Math.PI) d += Math.PI * 2;
+    g.beginPath(); g.arc(cx, cy, R, a0, a0 + d, d < 0); g.stroke();
+  }));
+  g.setLineDash([]);
+  rooms.forEach(r => {
+    if (!r.n) return; const [x, z] = r.l;
+    g.save(); g.translate(fx(x), fz(z)); g.rotate(rot);
+    g.direction = 'rtl'; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = 'rgba(0,14,53,.74)'; g.font = `700 ${.25 * PPU}px Heebo`; g.fillText(r.n, 0, 0);
+    g.direction = 'ltr'; g.fillStyle = 'rgba(0,14,53,.48)'; g.font = `600 ${.2 * PPU}px "Barlow Condensed"`; g.fillText(r.a + ' m²', 0, .26 * PPU);
+    g.restore();
+  });
+  return tex(c);
+}
+const floorMat = new THREE.MeshStandardMaterial({ map: PH(), roughness: .9, transparent: true, alphaTest: .02, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+const FLOOR = {
+  tile: { m: pbr('marble_01', '1k', { color: '#FFFFFF' }), t: 2.4 },
+  oak: { m: pbr('laminate_floor_02', '1k', { color: '#FFF6EC', emissive: '#2a1e12', emissiveIntensity: .0 }), t: 2.2 },
+  tile30: { m: pbr('long_white_tiles', '1k'), t: 1.3 },
+  deck: { m: pbr('marble_01', '1k', { color: '#F4EFE7' }), t: 2.4 }
+};
+Object.values(FLOOR).forEach(f => { f.m.emissive.set('#ffffff'); f.m.emissiveMap = f.m.map; f.m.emissiveIntensity = .38; f.m.polygonOffset = true; f.m.polygonOffsetFactor = -1; f.m.polygonOffsetUnits = -1; });
+rooms.forEach(r => {
+  const [x0, z0, x1, z1] = r.r, w = x1 - x0, d = z1 - z0, F = FLOOR[r.f];
+  const geo = new THREE.PlaneGeometry(w, d); geo.rotateX(-Math.PI / 2);
+  const pos = geo.attributes.position, uv = geo.attributes.uv;
+  for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + (x0 + x1) / 2) / F.t, -(pos.getZ(i) + (z0 + z1) / 2) / F.t);
+  const m = new THREE.Mesh(geo, F.m); m.position.set((x0 + x1) / 2, .003, (z0 + z1) / 2); m.receiveShadow = true; model.add(m);
+});
+const labelMat = new THREE.MeshBasicMaterial({ map: PH(), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2, toneMapped: false });
+const labelPlane = new THREE.Mesh(new THREE.PlaneGeometry(FW, FH), labelMat);
+labelPlane.rotation.x = -Math.PI / 2; labelPlane.position.set(0, .004, (PLAN.z0 + PLAN.z1) / 2); labelPlane.renderOrder = 2;
+model.add(labelPlane);
+
+// contact-shadow strips (cheap AO) along walls and under furniture
+function aoTex() {
+  const [c, g] = mkCanvas(64, 64);
+  const gr = g.createLinearGradient(0, 0, 0, 64); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(.5, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64); const t = new THREE.CanvasTexture(c); return t;
+}
+function blobTex() {
+  const [c, g] = mkCanvas(128, 128);
+  const gr = g.createRadialGradient(64, 64, 10, 64, 64, 64); gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+}
+const AO_T = aoTex(), BLOB_T = blobTex();
+const aoMat = new THREE.MeshBasicMaterial({ color: 0x0a1130, alphaMap: AO_T, transparent: true, opacity: .2, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 });
+const blobMat = new THREE.MeshBasicMaterial({ color: 0x0a1130, alphaMap: BLOB_T, transparent: true, opacity: .2, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 });
+const aoGroup = new THREE.Group(); model.add(aoGroup);
+function aoStrip(horiz, from, to, at, t) {
+  const len = to - from, wdt = t + .55;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(horiz ? len : wdt, horiz ? wdt : len), aoMat);
+  m.rotation.x = -Math.PI / 2; if (!horiz) m.rotation.z = Math.PI / 2;
+  if (!horiz) { m.geometry = new THREE.PlaneGeometry(len, wdt); m.rotation.z = Math.PI / 2; }
+  m.position.set(horiz ? (from + to) / 2 : at, .006, horiz ? at : (from + to) / 2); m.renderOrder = 3; aoGroup.add(m);
+}
+
+// walls
+const wallGroups = [], SLIDERS = [];
+function boxAlong(horiz, from, to, at, y0, y1, t, mat) {
+  const len = to - from, h = y1 - y0;
+  const geo = horiz ? new THREE.BoxGeometry(len, h, t) : new THREE.BoxGeometry(t, h, len);
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(horiz ? (from + to) / 2 : at, (y0 + y1) / 2, horiz ? at : (from + to) / 2);
+  m.castShadow = true; m.receiveShadow = true; return m;
+}
+walls.forEach((w, wi) => {
+  const g = new THREE.Group(); g.userData.rise = 0; g.userData.i = wi; g.userData.kind = w.kind;
+  const horiz = w.a[1] === w.b[1];
+  const at = horiz ? w.a[1] : w.a[0];
+  const s = (horiz ? w.a[0] : w.a[1]) - w.ext, e = (horiz ? w.b[0] : w.b[1]) + w.ext;
+  const mat = w.kind === 'mmd' ? mWallMmd : mWall;
+  const ops = [...w.ops].sort((p, q) => p.at - q.at);
+  let cur = s;
+  ops.forEach(o => {
+    const oa = o.at - o.w / 2, ob = o.at + o.w / 2;
+    if (oa > cur) { g.add(boxAlong(horiz, cur, oa, at, 0, WH, w.t, mat)); aoStrip(horiz, cur, oa, at, w.t); }
+    if (o.s > 0) g.add(boxAlong(horiz, oa, ob, at, 0, o.s, w.t, mat));
+    if (o.h < WH) g.add(boxAlong(horiz, oa, ob, at, o.h, WH, w.t, mat));
+    if (o.s > 0) aoStrip(horiz, oa, ob, at, w.t);
+    // sliding door: four framed panels on two tracks; the inner pair slides open (S.door)
+    if (o.slide) {
+      const n = 4, pw = o.w / n, fr = .045, f2 = .034;
+      [[oa, oa + fr], [ob - fr, ob]].forEach(([p, q]) => g.add(boxAlong(horiz, p, q, at, o.s, o.h, .1, mFrame)));
+      g.add(boxAlong(horiz, oa, ob, at, o.h - fr, o.h, .1, mFrame));
+      g.add(boxAlong(horiz, oa, ob, at, o.s, o.s + .025, .1, mFrame));
+      for (let k = 0; k < n; k++) {
+        const pg = new THREE.Group(), p0 = oa + fr * (k === 0) + k * pw, p1 = oa + (k + 1) * pw - fr * (k === n - 1), inner = k === 1 || k === 2;
+        const y0 = o.s + .025, y1 = o.h - fr;
+        pg.add(boxAlong(horiz, p0 + .01, p1 - .01, at, y0, y1, .016, mGlass));
+        [[p0, p0 + f2], [p1 - f2, p1]].forEach(([p, q]) => pg.add(boxAlong(horiz, p, q, at, y0, y1, .045, mFrame)));
+        pg.add(boxAlong(horiz, p0, p1, at, y1 - f2, y1, .045, mFrame));
+        pg.add(boxAlong(horiz, p0, p1, at, y0, y0 + f2 * 1.6, .045, mFrame));
+        if (horiz) pg.position.z = inner ? -.03 : .03; else pg.position.x = inner ? -.03 : .03;
+        g.add(pg);
+        if (inner) SLIDERS.push({ g: pg, horiz, d: (k === 1 ? -1 : 1) * (pw - f2 * .5) });
+      }
+    }
+    // glazing
+    if (o.win) {
+      const gh = o.h - o.s;
+      g.add(boxAlong(horiz, oa + .02, ob - .02, at, o.s, o.h, .02, mGlass));
+      const fr = .045;
+      [[oa, oa + fr], [ob - fr, ob]].forEach(([p, q]) => g.add(boxAlong(horiz, p, q, at, o.s, o.h, .07, mFrame)));
+      g.add(boxAlong(horiz, oa, ob, at, o.h - fr, o.h, .07, mFrame));
+      g.add(boxAlong(horiz, oa, ob, at, o.s, o.s + fr, .07, mFrame));
+      const nm = o.slide ? 3 : (o.w > 1.25 ? 1 : 0);
+      for (let k = 1; k <= nm; k++) { const p = oa + (o.w * k) / (nm + 1); g.add(boxAlong(horiz, p - .02, p + .02, at, o.s, o.h, .07, mFrame)); }
+    }
+    // door leaf
+    if (o.door) {
+      const leafW = o.w - .05, hinge = o.door.hinge === 'a' ? oa : ob;
+      const leaf = new THREE.Mesh(new THREE.BoxGeometry(leafW, 2.06, o.door.mmd ? .09 : .045), o.door.red ? mRed : (o.door.mmd ? mSteel : mFurn));
+      leaf.castShadow = true; leaf.receiveShadow = true;
+      const hg = new THREE.Group();
+      leaf.position.set((o.door.hinge === 'a' ? 1 : -1) * leafW / 2, 1.03, 0); hg.add(leaf);
+      const off = (w.t / 2) * o.door.side;
+      if (horiz) { hg.position.set(hinge, 0, at + off); hg.rotation.y = (o.door.hinge === 'a' ? -1 : 1) * o.door.side * 1.35; }
+      else { hg.position.set(at + off, 0, hinge); hg.rotation.y = -Math.PI / 2 + (o.door.hinge === 'a' ? -1 : 1) * o.door.side * -1.35; }
+      g.add(hg);
+    }
+    cur = Math.max(cur, ob);
+  });
+  if (e > cur) { g.add(boxAlong(horiz, cur, e, at, 0, WH, w.t, mat)); aoStrip(horiz, cur, e, at, w.t); }
+  g.scale.y = .001; model.add(g); wallGroups.push(g);
+});
+
+// balcony parapet (glass + rail)
+const balc = new THREE.Group(); balc.userData.rise = 0; model.add(balc); wallGroups.push(balc);
+[[[-6, 6.12], [1, 6.12]], [[.92, 4.55], [.92, 6.12]], [[-5.92, 4.55], [-5.92, 6.12]]].forEach(([a, b]) => {
+  const horiz = a[1] === b[1], at = horiz ? a[1] : a[0], s = horiz ? a[0] : a[1], e = horiz ? b[0] : b[1];
+  balc.add(boxAlong(horiz, s, e, at, 0, 1.0, .02, mGlass));
+  balc.add(boxAlong(horiz, s, e, at, 1.0, 1.06, .07, mFrame));
+  for (let p = s; p <= e + .001; p += (e - s) / Math.max(1, Math.round((e - s) / 1.2))) balc.add(boxAlong(horiz, p - .025, p + .025, at, 0, 1.0, .05, mFrame));
+});
+
+// furniture
+const furn = new THREE.Group(); furn.userData.rise = 0; model.add(furn);
+const FOOT = [];   // furniture footprints (plan coords) for the line drawing
+function rb(w, h, d, x, z, o = {}) {
+  if ((o.y || 0) < .05) FOOT.push({ t: 'r', x, z, w, d, ry: o.ry || 0 });
+  const r = Math.min(o.r ?? .05, w / 2.2, h / 2.2, d / 2.2);
+  const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, r), o.m || mFurn);
+  m.position.set(x, (o.y || 0) + h / 2, z); m.rotation.y = o.ry || 0; m.castShadow = true; m.receiveShadow = true; furn.add(m);
+  if (o.blob !== false && (o.y || 0) < .05) { const b = new THREE.Mesh(new THREE.PlaneGeometry(w + .45, d + .45), blobMat); b.rotation.x = -Math.PI / 2; b.rotation.z = o.ry || 0; b.position.set(x, .008, z); b.renderOrder = 3; furn.add(b); }
+  return m;
+}
+function cyl(r, h, x, z, o = {}) {
+  if ((o.y || 0) < .05) FOOT.push({ t: 'c', x, z, r });
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 40), o.m || mFurn); m.position.set(x, (o.y || 0) + h / 2, z); m.castShadow = m.receiveShadow = true; furn.add(m);
+  if (o.blob !== false && (o.y || 0) < .05) { const b = new THREE.Mesh(new THREE.PlaneGeometry(r * 2 + .5, r * 2 + .5), blobMat); b.rotation.x = -Math.PI / 2; b.position.set(x, .008, z); b.renderOrder = 3; furn.add(b); }
+  return m;
+}
+function tree(x, z, s = 1) {
+  cyl(.035 * s, 1.1 * s, x, z, { m: mWall, blob: false });
+  const ball = new THREE.Mesh(new THREE.IcosahedronGeometry(.42 * s, 3), mWall); ball.position.set(x, 1.25 * s, z); ball.castShadow = ball.receiveShadow = true; furn.add(ball);
+  const b2 = new THREE.Mesh(new THREE.IcosahedronGeometry(.28 * s, 3), mWall); b2.position.set(x + .22 * s, .98 * s, z - .1 * s); b2.castShadow = b2.receiveShadow = true; furn.add(b2);
+  cyl(.24 * s, .32 * s, x, z, { m: mFurn });
+}
+// living (photoscanned furniture is placed after loading, see placeInterior)
+const rug = rb(3.0, .015, 2.1, -2.6, 1.3, { m: pbr('rough_linen', '1k', { color: '#C9CCD2' }), r: .005, blob: false });
+[rug.material.map, rug.material.roughnessMap, rug.material.normalMap].forEach(t => t.repeat.set(2, 2));
+// kitchen
+rb(.62, .9, 3.0, 5.57, 2.75, { r: .02 });                           // counter along x=6
+rb(2.55, .9, .62, 4.17, 3.97, { r: .02 });                          // counter along z
+rb(.7, 1.95, .7, 5.52, 1.48, { r: .03 });                           // fridge
+rb(2.0, .92, .92, 3.75, 2.35, { m: mBalsa, r: .02 });               // island
+[[3.25, 1.62], [3.85, 1.62], [4.45, 1.62]].forEach(([x, z]) => cyl(.17, .7, x, z, { m: mFurn }));
+// master
+const mLinen = pbr('rough_linen', '1k', { color: '#E9EEF5' });
+rb(2.05, .42, 1.65, 4.85, -1.05, { m: mLinen, r: .08 });             // bed
+rb(.12, .95, 1.75, 5.8, -1.05, { m: mFurn, r: .03, blob: false });  // headboard
+[[-1.48], [-.62]].forEach(([z]) => rb(.38, .14, .6, 5.5, z, { m: mWall, y: .42, r: .06, blob: false }));
+rb(1.2, .08, 1.6, 4.35, -1.05, { m: pbr('rough_linen', '1k', { color: '#9DB4D3' }), y: .42, r: .03, blob: false }); // duvet fold
+rb(2.0, 2.2, .6, 3.55, .65, { r: .02 });                            // wardrobe
+// ensuite + bath
+rb(.9, .12, .9, 2.92, -3.88, { m: mWall, r: .03 });
+rb(.42, .4, .62, 3.85, -3.95, { r: .12 });
+rb(.6, .85, .45, 3.8, -2.6, { r: .03 });
+rb(1.6, .55, .74, 1.5, -4.0, { m: mWall, r: .1 });                  // bathtub
+rb(1.36, .02, .5, 1.5, -4.0, { m: M('#D6DFE8'), y: .54, r: .01, blob: false });
+rb(.42, .4, .62, .95, -2.5, { r: .12 });
+rb(.55, .85, .45, 2.0, -2.33, { r: .03 });
+// bedroom 3
+rb(.95, .42, 2.0, .02, -3.3, { m: mLinen, r: .08 });
+rb(.6, .12, .4, .02, -4.06, { m: mWall, y: .42, r: .05, blob: false });
+rb(1.25, .74, .6, -1.85, -3.95, { m: mBalsa, r: .02 });
+rb(.46, .46, .46, -1.85, -3.3, { r: .05 });
+rb(.6, 2.1, 1.6, -2.1, -1.5, { r: .02 });
+// mamad (office / guest)
+rb(1.0, .42, 2.0, -5.35, -3.15, { m: mLinen, r: .08 });
+rb(.6, .12, .4, -5.35, -3.92, { m: mWall, y: .42, r: .05, blob: false });
+rb(1.4, .74, .65, -3.45, -3.95, { m: mBalsa, r: .02 });
+rb(.48, .48, .48, -3.45, -3.25, { r: .05 });
+furn.scale.y = .001;
+function place(n, x, z, o = {}) {
+  if (!A[n]) return null;
+  const g = new THREE.Group(), c = A[n].clone(true);
+  g.add(c); g.position.set(x, o.y || 0, z); g.rotation.y = o.ry || 0; g.scale.setScalar(o.s || 1);
+  if (!o.y) { g.updateMatrixWorld(true); const fb = new THREE.Box3().setFromObject(g); FOOT.push({ t: 'r', x: (fb.min.x + fb.max.x) / 2, z: (fb.min.z + fb.max.z) / 2, w: fb.max.x - fb.min.x, d: fb.max.z - fb.min.z, ry: 0, soft: 1 }); }
+  furn.add(g);
+  if (o.blob !== false) { const bb = new THREE.Box3().setFromObject(c); const sz = bb.getSize(new THREE.Vector3()); const b = new THREE.Mesh(new THREE.PlaneGeometry(sz.x + .35, sz.z + .35), blobMat); b.rotation.x = -Math.PI / 2; b.position.set(0, .008 / (o.s || 1), 0); b.renderOrder = 3; g.add(b); }
+  return g;
+}
+function placeInterior() {
+  place('modern_wooden_cabinet', -2.5, -.27, { s: .9 });
+  place('GlamVelvetSofa', -2.6, 2.75, { ry: Math.PI });
+  place('modern_coffee_table_01', -2.6, 1.3, { ry: Math.PI / 2, s: 1.05 });
+  place('mid_century_lounge_chair', -4.85, .55, { ry: 2.35, s: .95 });
+  place('potted_plant_02', -5.45, 3.9, { s: 1.15 });
+  place('wooden_table_02', .95, 2.35, { ry: Math.PI / 2, s: 1.4 });
+  [[.2, 1.95, Math.PI / 2], [.2, 2.75, Math.PI / 2], [1.7, 1.95, -Math.PI / 2], [1.7, 2.75, -Math.PI / 2]].forEach(([x, z, r]) => place('dining_chair_02', x, z, { ry: r, s: .95 }));
+  place('potted_plant_04', .95, 2.35, { y: .8 * 1.4, s: 1.2, blob: false });
+  place('SheenChair', 5.4, .45, { ry: -2.4, s: .95 });
+  place('throw_pillows_01', 5.25, -1.05, { y: .42, ry: -Math.PI / 2, s: .78, blob: false });
+  [[-2.05], [-.05]].forEach(([z]) => place('side_table_01', 5.66, z, { s: .72, ry: -Math.PI / 2 }));
+  place('side_table_01', .3, -4.15, { s: .62 });
+  place('outdoor_table_chair_set_01', -2.4, 5.35, { ry: Math.PI / 2 });
+  place('potted_plant_02', .45, 5.75, { s: .8 });
+  place('potted_plant_04', -5.55, 5.8, { s: 1.6 });
+  place('potted_plant_04', -5.15, 5.85, { s: 1.25 });
+  place('mid_century_lounge_chair', -.4, 5.3, { ry: -2.6, s: .8 });
+}
+
+/* ================================================================
+   PORTAL: the real apartment, seen through the maquette's sliding door
+   (an unedited listing photo on a plane just inside the door; the camera
+   flies to the exact pose where it fills the frame, then the DOM photo takes over)
+   ================================================================ */
+const PORTAL = { X: -3.1, CX: -3.1, E: 1.35, Z: 3.4, W: 5.0, Y0: -.3, Y1: 2.45, CZ: 5.35, FOV: 50, AR: 1600 / 1056 };
+const portalTex = texLoader.load('assets/real/r0.webp');
+portalTex.colorSpace = THREE.SRGBColorSpace; portalTex.anisotropy = MAXANI;
+// the photo's horizon (its vertical centre) sits at eye height; the plane shows the part between Y0 and Y1
+{ const Hf = PORTAL.W / PORTAL.AR, b = PORTAL.E - Hf / 2; portalTex.repeat.set(1, (PORTAL.Y1 - PORTAL.Y0) / Hf); portalTex.offset.set(0, (PORTAL.Y0 - b) / Hf); }
+const portalMat = new THREE.MeshBasicMaterial({ map: portalTex, transparent: true, opacity: 0, toneMapped: false, depthWrite: false });
+const portal = new THREE.Mesh(new THREE.PlaneGeometry(PORTAL.W, PORTAL.Y1 - PORTAL.Y0), portalMat);
+portal.position.set(PORTAL.X, (PORTAL.Y0 + PORTAL.Y1) / 2, PORTAL.Z); portal.renderOrder = 4; model.add(portal);
+// camera path for the dive, in model-local coordinates (balcony side = +z)
+const DIVE_P = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(PORTAL.X + 4.2, 9.5, 4.4 + 19), new THREE.Vector3(PORTAL.X + 1.4, 3.9, 4.4 + 9.5),
+  new THREE.Vector3(PORTAL.X + .25, 1.62, 4.4 + 3.6), new THREE.Vector3(PORTAL.X, PORTAL.E, PORTAL.CZ)], false, 'centripetal');
+const DIVE_T = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(PORTAL.X + .8, .6, 0), new THREE.Vector3(PORTAL.X + .2, 1.1, 1.6),
+  new THREE.Vector3(PORTAL.X + .04, PORTAL.E - .04, .9), new THREE.Vector3(PORTAL.X, PORTAL.E, 0)], false, 'centripetal');
+
+/* ================================================================
+   PROPS: pencil, steel ruler, keys
+   ================================================================ */
+const props = new THREE.Group(); scene.add(props);
+const propMats = [];
+function pm(m) { m.transparent = true; propMats.push(m); return m; }
+// photoscanned desk props, 1:1 with the 1:50 model -> scale 50
+const PROP = {};
+function makeProp(n, rot = [0, 0, 0]) {
+  const g = new THREE.Group(); if (!A[n]) return g;
+  const inner = new THREE.Group(); const c = A[n].clone(true); inner.add(c); inner.rotation.set(...rot); inner.scale.setScalar(50);
+  g.add(inner); inner.updateMatrixWorld(true);
+  const bb = new THREE.Box3().setFromObject(inner), cen = bb.getCenter(new THREE.Vector3());
+  inner.position.set(-cen.x, -bb.min.y, -cen.z);
+  c.traverse(m => { if (m.isMesh) { m.material = m.material.clone(); pm(m.material); } });
+  props.add(g); return g;
+}
+
+// steel ruler 30 cm -> 15 units
+const ruler = new THREE.Group();
+{
+  const L = 16, D = 1.55;
+  const top = pm(new THREE.MeshStandardMaterial({ map: PH(), roughness: .32, metalness: .85 }));
+  ruler.userData.top = top;
+  const side = pm(M('#B4B9C3', { roughness: .3, metalness: .9 }));
+  const bar = new THREE.Mesh(new THREE.BoxGeometry(L, .06, D), [side, side, top, side, side, side]);
+  bar.position.y = .03; bar.castShadow = bar.receiveShadow = true; ruler.add(bar);
+}
+props.add(ruler);
+
+// keys + RE/MAX tag
+const keys = new THREE.Group();
+{
+  const metal = pm(new THREE.MeshStandardMaterial({ color: '#CFC4A3', roughness: .28, metalness: .95 }));
+  const steel = pm(new THREE.MeshStandardMaterial({ color: '#C9CDD5', roughness: .25, metalness: .95 }));
+  function keyShape() {
+    const s = new THREE.Shape();
+    s.absarc(0, 0, .62, 0, Math.PI * 2, false);
+    const hole = new THREE.Path(); hole.absarc(-.28, 0, .17, 0, Math.PI * 2, true); s.holes.push(hole);
+    return s;
+  }
+  function blade() {
+    const s = new THREE.Shape(); const y0 = -.17, y1 = .17;
+    s.moveTo(.45, y1); s.lineTo(2.75, y1); s.lineTo(2.95, .02); s.lineTo(2.75, y0);
+    const teeth = [2.55, 2.3, 2.05, 1.8, 1.55]; let x = 2.75;
+    teeth.forEach((t, i) => { s.lineTo(t + .12, y0); s.lineTo(t, y0 - (i % 2 ? .12 : .2)); s.lineTo(t - .12, y0); });
+    s.lineTo(.45, y0); s.lineTo(.45, y1); return s;
+  }
+  const ex = { depth: .07, bevelEnabled: true, bevelThickness: .015, bevelSize: .015, bevelSegments: 2, curveSegments: 32 };
+  const k1 = new THREE.Group();
+  const head = new THREE.Mesh(new THREE.ExtrudeGeometry(keyShape(), ex), metal); k1.add(head);
+  const bl = new THREE.Mesh(new THREE.ExtrudeGeometry(blade(), { ...ex, depth: .05 }), metal); bl.position.z = .01; k1.add(bl);
+  k1.rotation.x = -Math.PI / 2; k1.position.set(.2, .05, 0); k1.rotation.z = .35; keys.add(k1);
+  const k2 = k1.clone(); k2.traverse(m => { if (m.isMesh) m.material = steel; }); k2.rotation.z = -.55; k2.position.set(.1, .14, .35); keys.add(k2);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(.55, .05, 12, 64), steel); ring.rotation.x = -Math.PI / 2; ring.position.set(-.55, .1, .05); keys.add(ring);
+  // tag
+  const ts = new THREE.Shape(); const w = 1.0, h = .5625, rr = .12;
+  ts.moveTo(-w + rr, -h); ts.lineTo(w - rr, -h); ts.quadraticCurveTo(w, -h, w, -h + rr); ts.lineTo(w, h - rr); ts.quadraticCurveTo(w, h, w - rr, h); ts.lineTo(-w + rr, h); ts.quadraticCurveTo(-w, h, -w, h - rr); ts.lineTo(-w, -h + rr); ts.quadraticCurveTo(-w, -h, -w + rr, -h);
+  const th = new THREE.Path(); th.absarc(-w + .2, h - .2, .07, 0, Math.PI * 2, true); ts.holes.push(th);
+  const tagM = pm(new THREE.MeshStandardMaterial({ map: PH(), roughness: .55 })); keys.userData.tagM = tagM;
+  const tag = new THREE.Mesh(new THREE.ExtrudeGeometry(ts, { depth: .06, bevelEnabled: true, bevelThickness: .02, bevelSize: .02, bevelSegments: 3 }), [tagM, pm(M('#8E0E1B', { roughness: .5 }))]);
+  tag.rotation.x = -Math.PI / 2; tag.position.set(-2.05, .06, .55); tag.rotation.z = .2; keys.add(tag);
+  keys.traverse(m => { if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } });
+}
+props.add(keys);
+
+function makeRulerTex() {
+  const [c, g] = mkCanvas(4096, 400);
+  const lg = g.createLinearGradient(0, 0, 0, 400); lg.addColorStop(0, '#D5D9E0'); lg.addColorStop(1, '#BCC1CA'); g.fillStyle = lg; g.fillRect(0, 0, 4096, 400);
+  for (let i = 0; i < 900; i++) { g.strokeStyle = `rgba(${Math.random() > .5 ? '255,255,255' : '40,45,60'},${Math.random() * .08})`; g.lineWidth = 1; const y = Math.random() * 400; g.beginPath(); g.moveTo(0, y); g.lineTo(4096, y + Math.random() * 2); g.stroke(); }
+  const pmm = (4096 - 120) / 320; g.strokeStyle = '#1B2236'; g.fillStyle = '#1B2236';
+  for (let i = 0; i <= 310; i++) { const x = 60 + i * pmm; const Lt = i % 10 === 0 ? 110 : i % 5 === 0 ? 76 : 46; g.lineWidth = i % 10 === 0 ? 3 : 2; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, Lt); g.stroke(); }
+  g.font = '600 62px "Barlow Condensed"'; g.textAlign = 'center';
+  for (let i = 0; i <= 31; i++) g.fillText(String(i), 60 + i * 10 * pmm, 180);
+  g.textAlign = 'left'; g.font = '700 46px "Barlow Condensed"'; g.fillText('REMAX  ·  STAINLESS  ·  CM', 70, 330);
+  return tex(c);
+}
+const LOGO_SVG = (letters) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60"><g><path fill="#fff" d="M14.4,31c-.5,0-.9-.3-1.3-.6-2.4-2-6.6-5.7-8.2-7.8-1.4-1.7-2.7-3.3-3.3-5.4-.4-1.2-.5-2.4-.5-3.6s.3-3.2.9-4.7C4,4,8.9.8,14.4.8s10.4,3.2,12.4,8.2c.6,1.5.9,3.1.9,4.7s-.2,2.4-.5,3.6c-.6,2-1.8,3.6-3.3,5.4-1.7,2-5.9,5.7-8.2,7.7-.4.3-.8.6-1.3.6Z"/><path fill="#f7f5ee" d="M26.2,9.2H2.6c-.6,1.4-.9,2.9-.9,4.4s.2,2.3.5,3.4h24.3c.3-1.1.5-2.2.5-3.4s-.3-3.1-.9-4.4Z"/><path fill="#600" d="M14.4,1.5c-5.4,0-10,3.2-11.8,7.7h23.6c-1.8-4.5-6.4-7.7-11.8-7.7Z"/><path fill="#000e35" d="M2.2,17.1c.6,2,1.9,3.6,3.2,5.2,1.7,2.1,6.4,6.2,8.2,7.8h0c.2.2.5.4.8.4s.5-.2.8-.4h0c1.8-1.6,6.5-5.7,8.2-7.8,1.3-1.6,2.6-3.2,3.2-5.2H2.2Z"/><path fill="#ff1200" d="M26.2,9.2h-11.8V3.6c0-1.2,1.1-2.1,2.3-1.9,4.4.8,8,3.7,9.5,7.5Z"/><path fill="#0043ff" d="M26.5,17.1c-.6,2-1.9,3.6-3.2,5.2-1.7,2.1-6.4,6.2-8.2,7.8h0c-.2.2-.5.4-.8.4v-11.3c0-1.1.9-2,2-2h10.1Z"/></g><g fill="${letters}"><path d="M51.2,34.7c-1,.9-2.7,1.4-5.1,1.4h-5.7v-10.7h5.6c2.5,0,4.2.4,5.2,1.3,1,.9,1.5,2.2,1.5,4s-.5,3.2-1.5,4.1ZM56.9,42.2c4.3-2.5,6.5-6.5,6.5-12s-1.3-7.4-4-9.8c-2.7-2.4-6.9-3.6-12.8-3.6h-17v42.3h10.7v-14.6h6.6l7.1,14.6h11.7l-8.8-17Z"/><path d="M94.9,25.7v-8.9h-29.2v42.3h15.7l4.6-8.9h-9.2v-8.1h13.4l4.7-9h-18.1v-7.5h18.1Z"/><path d="M199.9,37.3l12.6-20.5h-12.1l-7.2,12.9-7.2-12.9h-12.6l12.6,20.1-8.6,14-11.6-34.1h-13.7l-12.3,35.9V16.8h-13l-9.4,28.6-9.4-28.6h-4.6l-8.5,16.4v26h10.1v-25l8.1,25h8.1l8.2-25.1v25.1h19.4l2.6-8.1h14.7l2.5,8.1h0s0,0,0,0h15.8l8.2-14.8,8.8,14.8h12.7l-14.3-21.8ZM154.1,42l4.7-15.8,4.7,15.8h-9.5Z"/><path d="M218.8,18.6c0,1.1-.8,1.8-1.8,1.8s-1.8-.7-1.8-1.8.8-1.8,1.8-1.8,1.8.7,1.8,1.8ZM218.5,18.6c0-.9-.7-1.5-1.4-1.5s-1.4.6-1.4,1.5.7,1.5,1.4,1.5,1.4-.6,1.4-1.5ZM217.5,18.7l.4.8h-.5l-.4-.7h-.2v.7h-.5v-1.9h.8c.5,0,.7.2.7.6s-.1.4-.4.5ZM216.8,18.4h.3c.2,0,.3,0,.3-.3s-.1-.3-.3-.3h-.3v.5Z"/></g></svg>`;
+function svgImage(svg) { return new Promise(r => { const im = new Image(); im.onload = () => r(im); im.onerror = () => r(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }); }
+async function makeTagTex() {
+  const [c, g] = mkCanvas(1024, 576); g.fillStyle = '#000E35'; g.fillRect(0, 0, 1024, 576);
+  noise(g, 1024, 576, 6);
+  const im = await svgImage(LOGO_SVG('#F7F5EE'));
+  if (im) g.drawImage(im, 150, 170, 724, 197);
+  g.font = '600 46px "Barlow Condensed"'; g.fillStyle = 'rgba(247,245,238,.72)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText('BEER SHEVA  ·  050-559-9259', 512, 470);
+  const tt = tex(c); tt.repeat.set(1 / 2.0, 1 / 1.125); tt.offset.set(.5, .5); return tt;
+}
+/* ================================================================
+   STATE  (everything the scroll timeline drives)
+   ================================================================ */
+const S = {
+  polar: .0001, azim: 0, rad: 1, tx: 0, ty: 0, tz: 0, rot: 0,
+  matO: 0, propsO: 0, catch: .32, labels: 0, wallH: 1,
+  sun: 2.5, sunX: -10, sunY: 16, sunZ: -8, rim: 0, hemi: .95, env: .62, exp: 1.0,
+  sel: 0, c3: 0, orbit: 0, endSink: 0, tzK: 0, glO: 0, team: 0, rib: 0,
+  // the dive: face = turn the balcony to camera, free = blend orbit->path, dive = path t, door = sliders open, portal = real photo, gs = monochrome
+  face: 0, free: 0, dive: 0, fov: 26, door: 0, portal: 0, gs: 1, c3y: 0
+};
+const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+addEventListener('pointermove', e => { if (RM) return; mouse.tx = (e.clientX / innerWidth - .5) * 2; mouse.ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+
+let VIEW = { baseR: 40, portrait: false, aspect: 1 };
+const FOV = 26, TF = Math.tan(FOV * Math.PI / 360);
+function layout() {
+  const w = innerWidth, h = innerHeight, a = w / h;
+  renderer.setSize(w, h, false); camera.aspect = a; camera.fov = FOV; camera.updateProjectionMatrix();
+  const portrait = a < 1;
+  const pw = portrait ? 10.7 : 12.25, ph = portrait ? 12.25 : 10.7;
+  const Vh = portrait ? Math.max(ph / .4, pw / (.84 * a)) : Math.max(ph / .47, pw / (.37 * a));
+  VIEW = { baseR: Vh / (2 * TF), portrait, aspect: a, Vh, Vw: Vh * a, heroTz: portrait ? .035 * Vh : -.088 * Vh, heroTx: portrait ? -.035 * Vh * a : .148 * Vh * a, heroZ: portrait ? .94 : .86 };
+  pivot.userData.base = portrait ? Math.PI / 2 : 0;
+  // on a phone the dive ends on the dining table (right of the photo centre), not on the curtain
+  PORTAL.CX = PORTAL.X + (portrait ? .55 : 0);
+  DIVE_P.points[3].x = PORTAL.CX; DIVE_P.points[2].x = PORTAL.CX + .25; DIVE_T.points[3].x = PORTAL.CX; DIVE_T.points[2].x = PORTAL.CX + .04;
+  // place the mat & props relative to the hero view (top-down, target 0,0,0)
+  const vx0 = -VIEW.Vw / 2, vx1 = VIEW.Vw / 2, vz0 = -Vh / 2 + VIEW.heroTz, vz1 = Vh / 2 + VIEW.heroTz;
+  if (!portrait) {
+    const right = vx1 - .235 * VIEW.Vw, bottom = vz1 - .14 * Vh;
+    mat.rotation.y = .045;
+    mat.position.x = right - MAT_W / 2 - .45; mat.position.z = bottom - MAT_H / 2 - .2;
+    if (PROP.pens) { PROP.pens.position.set(vx0 + .27 * VIEW.Vw, 0, vz0 + .12 * Vh); PROP.pens.rotation.y = .78; }
+    if (PROP.tape) { PROP.tape.position.set(vx1 - .085 * VIEW.Vw, 0, vz0 + .385 * Vh); PROP.tape.rotation.y = -1.15; }
+    if (PROP.specs) { PROP.specs.position.set(vx1 - .155 * VIEW.Vw, 0, vz0 + .8 * Vh); PROP.specs.rotation.y = 2.55; }
+    const r0 = new THREE.Vector3(vx0 + .355 * VIEW.Vw, 0, vz0 + .64 * Vh), r1 = new THREE.Vector3(vx0 + .2 * VIEW.Vw, 0, vz1 + .1 * Vh);
+    placeLong(ruler, r0, r1, 0, true);
+    keys.position.set(vx0 + .665 * VIEW.Vw, 0, vz0 + .8 * Vh); keys.rotation.y = -.35; keys.scale.setScalar(1.05);
+  } else {
+    mat.rotation.y = -.04;
+    mat.position.x = vx1 + 2.5 - MAT_W / 2; mat.position.z = vz1 - .2 * Vh - MAT_H / 2;
+    if (PROP.pens) PROP.pens.position.set(0, -80, 0);
+    if (PROP.tape) PROP.tape.position.set(0, -80, 0); if (PROP.specs) PROP.specs.position.set(0, -80, 0);
+    ruler.position.set(0, -50, 0); keys.position.set(0, -50, 0);
+  }
+  labelMat.map = labelsTexture(portrait ? -Math.PI / 2 : 0); labelMat.needsUpdate = true;
+}
+function placeLong(obj, p0, p1, y, isRuler) {
+  const mid = p0.clone().add(p1).multiplyScalar(.5); obj.position.set(mid.x, y, mid.z);
+  const ang = Math.atan2(p1.z - p0.z, p1.x - p0.x); obj.rotation.set(0, -ang, 0);
+  if (isRuler) obj.position.y = 0;
+}
+
+/* ================================================================
+   RENDER LOOP
+   ================================================================ */
+const v3 = new THREE.Vector3();
+const bbLocal = []; [PLAN.x0, PLAN.x1].forEach(x => [0, WH + .15].forEach(y => [PLAN.z0 - PCZ, PLAN.z1 - PCZ].forEach(z => bbLocal.push(new THREE.Vector3(x, y, z)))));
+let last = performance.now(), T = 0, c3Shown = false;
+const camL = new THREE.Vector3(), tgtL = new THREE.Vector3(), pthP = new THREE.Vector3(), pthT = new THREE.Vector3(), invM = new THREE.Matrix4();
+const wrapPI = a => { a = (a + Math.PI) % (Math.PI * 2); if (a < 0) a += Math.PI * 2; return a - Math.PI; };
+function frame() {
+  const now = performance.now(), dt = Math.min(.05, (now - last) / 1000); last = now; T += dt;
+  mouse.x += (mouse.tx - mouse.x) * .045; mouse.y += (mouse.ty - mouse.y) * .045;
+  // the model turns its balcony towards the camera before the dive
+  const pr = pivot.userData.base + S.rot;
+  pivot.rotation.y = pr + (S.face > 0 ? wrapPI(S.azim - pr) * S.face : 0);
+  const c3y = VIEW.portrait ? 0 : S.c3y;
+  const R = VIEW.baseR * S.rad * lerp(1, VIEW.portrait ? 1.55 : 1, clamp(S.polar, 0, 1)) * lerp(VIEW.heroZ || 1, 1, clamp(S.polar / .6, 0, 1)) * (1 + c3y * .6);
+  const polar = Math.max(.0001, S.polar + mouse.y * .025 * Math.min(1, S.polar * 3));
+  const azim = S.azim + mouse.x * .05 * Math.min(1, S.polar * 3);
+  const tx = S.tx * (VIEW.portrait ? .3 : 1) + (VIEW.heroTx || 0) * (1 - clamp(S.polar / .7, 0, 1)) + mouse.x * .22 * (1 - Math.min(1, S.polar * 3));
+  const tz = S.tz + S.tzK * VIEW.Vh + VIEW.heroTz * (1 - clamp(S.polar / .7, 0, 1)) + mouse.y * .16 * (1 - Math.min(1, S.polar * 3));
+  camL.set(tx + R * Math.sin(polar) * Math.sin(azim), S.ty + c3y * VIEW.Vh + R * Math.cos(polar), tz + R * Math.sin(polar) * Math.cos(azim));
+  tgtL.set(tx, S.ty + c3y * VIEW.Vh, tz);
+  if (S.free > .0001) {
+    // blend the orbit rig into the dive path, in the model's own frame
+    pivot.updateMatrixWorld(true); invM.copy(model.matrixWorld).invert();
+    camL.applyMatrix4(invM); tgtL.applyMatrix4(invM);
+    const t = clamp(S.dive, 0, 1); DIVE_P.getPoint(t, pthP); DIVE_T.getPoint(t, pthT);
+    camL.lerp(pthP, S.free); tgtL.lerp(pthT, S.free);
+    camL.applyMatrix4(model.matrixWorld); tgtL.applyMatrix4(model.matrixWorld);
+  }
+  camera.position.copy(camL); camera.lookAt(tgtL);
+  const near = S.free > .0001 ? lerp(.5, .04, S.free) : .5;
+  if (camera.fov !== S.fov || camera.near !== near) { camera.fov = S.fov; camera.near = near; camera.updateProjectionMatrix(); }
+  SLIDERS.forEach(sl => { if (sl.horiz) sl.g.position.x = sl.d * S.door; else sl.g.position.z = sl.d * S.door; });
+  portalMat.opacity = S.portal; portal.visible = S.portal > .003;
+  GS.value = S.gs;
+  // materials
+  deskMat.opacity = S.matO; matMat.opacity = S.matO; matSide.opacity = S.matO;
+  desk.visible = mat.visible = S.matO > .003; deskMat.depthWrite = matMat.depthWrite = S.matO > .98;
+  propMats.forEach(m => m.opacity = S.propsO); props.visible = S.propsO > .003;
+  catcherMat.opacity = S.catch;
+  labelMat.opacity = S.labels;
+  // walls & furniture
+  const sink = 1 - S.endSink * .8;
+  wallGroups.forEach(g => g.scale.y = Math.max(.001, g.userData.rise * sink));
+  furn.scale.y = Math.max(.001, furn.userData.rise * (1 - S.endSink * .6));
+  // lights
+  sun.intensity = S.sun; sun.position.set(S.sunX, S.sunY, S.sunZ); sun.target.position.set(0, 0, 0);
+  rim.intensity = S.rim; rim.position.set(9, 6, -12);
+  hemi.intensity = S.hemi; scene.environmentIntensity = S.env; renderer.toneMappingExposure = S.exp;
+  canvas.style.opacity = S.glO;
+  if (S.glO > .005) renderer.render(scene, camera);
+  if (S.team > .001) updateTeam();
+  if (S.c3 > .001) { updateC3(); c3Shown = true; } else if (c3Shown) { pills.forEach(p => p.f.style.opacity = p.b.style.opacity = 0); c3Shown = false; }
+  if (preState.on) { camera.updateMatrixWorld(); pivot.updateMatrixWorld(true); drawPre(); }
+}
+
+/* ================================================================
+   CHAPTER 3 overlays: selection box + orbiting neighbourhood pills
+   ================================================================ */
+const selEl = $('#sel'), dimEl = $('#dim');
+const hoods = [];   // calmer chapter: no orbiting pills
+const pills = hoods.map((n, i) => {
+  const b = document.createElement('div'); b.className = 'pill'; b.innerHTML = (i % 3 === 0 ? '<b></b>' : '') + n; $('#pillsBack').appendChild(b);
+  const f = b.cloneNode(true); $('#pillsFront').appendChild(f);
+  return { b, f, a: i / hoods.length * Math.PI * 2, y: 1.6 + Math.sin(i * 2.1) * 1.2, r: 9.2 + (i % 2) * 1.1 };
+});
+function project(v) { v.project(camera); return [(v.x * .5 + .5) * innerWidth, (-v.y * .5 + .5) * innerHeight, v.z]; }
+function updateC3() {
+  // bounding box of the model in screen space
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  pivot.updateMatrixWorld();
+  bbLocal.forEach(p => { v3.copy(p).applyMatrix4(pivot.matrixWorld); const [x, y] = project(v3); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); });
+  const pad = 14; x0 -= pad; y0 -= pad; x1 += pad; y1 += pad;
+  const w = x1 - x0, h = y1 - y0;
+  selEl.style.transform = `translate(${x0}px,${y0}px)`; selEl.setAttribute('width', w); selEl.setAttribute('height', h);
+  const box = selEl.querySelector('.box'); box.setAttribute('width', w); box.setAttribute('height', h);
+  const per = 2 * (w + h); box.style.strokeDasharray = `3 4`; box.style.clipPath = `inset(0 ${100 - S.sel * 100}% 0 0)`;
+  const hs = [[0, 0], [w / 2, 0], [w, 0], [w, h / 2], [w, h], [w / 2, h], [0, h], [0, h / 2]];
+  selEl.querySelectorAll('.h').forEach((r, i) => { r.setAttribute('x', hs[i][0] - 3.5); r.setAttribute('y', hs[i][1] - 3.5); r.style.opacity = clamp(S.sel * 3 - i * .2, 0, 1); });
+  const rot = selEl.querySelector('.rot'); rot.setAttribute('cx', w + 16); rot.setAttribute('cy', -16); rot.style.opacity = clamp(S.sel * 2 - 1, 0, 1);
+  const t1 = selEl.querySelector('.t1'), t2 = selEl.querySelector('.t2');
+  t1.setAttribute('x1', w / 2); t1.setAttribute('x2', w / 2); t1.setAttribute('y1', -10); t1.setAttribute('y2', 10);
+  t2.setAttribute('x1', w / 2); t2.setAttribute('x2', w / 2); t2.setAttribute('y1', h - 10); t2.setAttribute('y2', h + 10);
+  dimEl.style.transform = `translate(calc(${x0 + w / 2}px - 50%), calc(${y0 - 12}px - 100%))`;
+  // pills
+  const cen = new THREE.Vector3(0, 1.3, 0); const cd = camera.position.distanceTo(cen);
+  pills.forEach((p, i) => {
+    const a = p.a + S.orbit + (RM ? 0 : T * .045);
+    v3.set(Math.cos(a) * p.r, p.y + Math.sin(T * .6 + i) * .12, Math.sin(a) * p.r * .78);
+    const d = camera.position.distanceTo(v3);
+    const [x, y] = project(v3);
+    const front = d < cd;
+    const sc = clamp(cd / d, .7, 1.3);
+    const o = clamp(S.c3 * 1.4 - (i % 5) * .08, 0, 1) * clamp(1.25 - (d - cd) / 22, .25, 1);
+    const tr = `translate(${x}px,${y}px) translate(-50%,-50%) scale(${sc})`;
+    p.f.style.transform = p.b.style.transform = tr;
+    p.f.style.opacity = front ? o : 0; p.b.style.opacity = front ? 0 : o;
+  });
+}
+
+/* ================================================================
+   PRELOADER — the plan is drawn, then built
+   ================================================================ */
+const pc = $('#prec'), pg = pc.getContext('2d'), preEl = $('#pre');
+const preState = { on: !SKIP, bg: 1, draw: 0, wedge: 0, wedgeT: 0, real: 0, handles: 0, dims: 0, lines: 1, cons: 1, furn: 0 };
+function sizePre() { const d = Math.min(devicePixelRatio || 1, 2); pc.width = innerWidth * d; pc.height = innerHeight * d; pg.setTransform(d, 0, 0, d, 0, 0); }
+function P(x, z) {
+  // plan coords -> screen: the drawing lies exactly on the model's floor, whatever the camera does
+  v3.set(x, 0, z); model.localToWorld(v3);
+  const [sx, sy] = project(v3); return [sx, sy];
+}
+const segs = [];
+function buildSegs() {
+  segs.length = 0;
+  walls.forEach(w => {
+    const horiz = w.a[1] === w.b[1], at = horiz ? w.a[1] : w.a[0];
+    const s0 = (horiz ? w.a[0] : w.a[1]) - w.ext, e0 = (horiz ? w.b[0] : w.b[1]) + w.ext;
+    let cur = s0;
+    [...w.ops].sort((p, q) => p.at - q.at).forEach(o => {
+      const oa = o.at - o.w / 2, ob = o.at + o.w / 2;
+      if (oa > cur) segs.push({ horiz, p: cur, q: oa, at, t: w.t, ext: w.kind === 'ext' });
+      segs.push({ horiz, p: oa, q: ob, at, t: w.t, op: o, ext: w.kind === 'ext' });
+      cur = ob;
+    });
+    if (e0 > cur) segs.push({ horiz, p: cur, q: e0, at, t: w.t, ext: w.kind === 'ext' });
+  });
+  segs.sort((a, b) => (b.ext - a.ext));
+}
+function drawPre() {
+  const w = innerWidth, h = innerHeight, L = preState.lines;
+  if (L <= 0 && preState.bg <= 0) { if (!preState.cleared) { pg.clearRect(0, 0, w, h); preEl.style.backgroundColor = 'transparent'; preState.cleared = true; } return; }
+  preState.cleared = false; pg.clearRect(0, 0, w, h);
+  preEl.style.backgroundColor = `rgba(255,255,255,${preState.bg})`;
+  if (L <= 0) return;
+  const A = P(PLAN.x0, -4.525), B = P(PLAN.x1, -4.525), Cc = P(PLAN.x1, 4.525), D = P(PLAN.x0, 4.525);
+  const xs = [A[0], B[0], Cc[0], D[0]], ys = [A[1], B[1], Cc[1], D[1]];
+  const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  const bx = [minx, maxx], by = [miny, maxy];
+  // construction lines across the screen
+  pg.save(); pg.globalAlpha = (.55 * L * preState.bg + .25 * L) * preState.cons; pg.strokeStyle = 'rgba(14,14,16,.16)'; pg.lineWidth = 1; pg.setLineDash([2, 5]);
+  const cx = (minx + maxx) / 2, cy = (miny + maxy) / 2, ext = clamp(preState.draw * 1.6, 0, 1);
+  [...bx].forEach(x => { pg.beginPath(); pg.moveTo(x, cy - (cy + 40) * ext); pg.lineTo(x, cy + (h - cy + 40) * ext); pg.stroke(); });
+  [...by].forEach(y => { pg.beginPath(); pg.moveTo(cx - (cx + 40) * ext, y); pg.lineTo(cx + (w - cx + 40) * ext, y); pg.stroke(); });
+  pg.restore();
+  // progress wedge filling the interior (a nod to the loader sweep)
+  if (preState.wedge > 0) {
+    pg.save(); pg.globalAlpha = L;
+    pg.beginPath(); pg.moveTo(...A); pg.lineTo(...B); pg.lineTo(...Cc); pg.lineTo(...D); pg.closePath();
+    const bal = [P(-6, 4.525), P(1, 4.525), P(1, 6.2), P(-6, 6.2)]; pg.moveTo(...bal[0]); bal.slice(1).forEach(p => pg.lineTo(...p)); pg.closePath(); pg.clip();
+    const R = Math.hypot(maxx - minx, maxy - miny);
+    pg.beginPath(); pg.moveTo(cx, cy); pg.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * preState.wedge); pg.closePath();
+    pg.fillStyle = 'rgba(14,14,16,.035)'; pg.fill(); pg.restore();
+  }
+  // walls as solid poché, drawn progressively; openings as glazing lines / door swings
+  pg.save(); pg.globalAlpha = L; pg.setLineDash([]);
+  const n = segs.length, shown = preState.draw * n;
+  const rect = (sg, k) => {
+    const t = sg.t / 2, q = sg.p + (sg.q - sg.p) * k;
+    const c = sg.horiz ? [[sg.p, sg.at - t], [q, sg.at - t], [q, sg.at + t], [sg.p, sg.at + t]] : [[sg.at - t, sg.p], [sg.at + t, sg.p], [sg.at + t, q], [sg.at - t, q]];
+    return c.map(([x, z]) => P(x, z));
+  };
+  segs.forEach((sg, i) => {
+    const k = clamp(shown - i, 0, 1); if (k <= 0) return;
+    if (!sg.op) {
+      const pts = rect(sg, k); pg.beginPath(); pg.moveTo(...pts[0]); pts.slice(1).forEach(p => pg.lineTo(...p)); pg.closePath();
+      pg.fillStyle = sg.ext ? 'rgba(14,14,16,.92)' : 'rgba(14,14,16,.6)'; pg.fill();
+    } else if (sg.op.win || sg.op.slide) {
+      pg.strokeStyle = 'rgba(14,14,16,.8)'; pg.lineWidth = 1;
+      [-.3, .3].forEach(f => { const a = sg.horiz ? P(sg.p, sg.at + sg.t * f) : P(sg.at + sg.t * f, sg.p), b = sg.horiz ? P(sg.p + (sg.q - sg.p) * k, sg.at + sg.t * f) : P(sg.at + sg.t * f, sg.p + (sg.q - sg.p) * k); pg.beginPath(); pg.moveTo(...a); pg.lineTo(...b); pg.stroke(); });
+      if (sg.op.s > 0) { const pts = rect(sg, k); pg.strokeStyle = 'rgba(14,14,16,.35)'; pg.beginPath(); pg.moveTo(...pts[0]); pts.slice(1).forEach(p => pg.lineTo(...p)); pg.closePath(); pg.stroke(); }
+    } else if (sg.op.door) {
+      const o = sg.op, hp = o.door.hinge === 'a' ? sg.p : sg.q, sd = o.door.side, Rw = (o.w - .05);
+      const off = sg.t / 2 * sd;
+      const H0 = sg.horiz ? [hp, sg.at + off] : [sg.at + off, hp];
+      const along = sg.horiz ? [o.door.hinge === 'a' ? 1 : -1, 0] : [0, o.door.hinge === 'a' ? 1 : -1];
+      const norm = sg.horiz ? [0, sd] : [sd, 0];
+      const N = 24; pg.strokeStyle = o.door.red ? 'rgba(14,14,16,.85)' : 'rgba(14,14,16,.42)'; pg.lineWidth = 1; pg.setLineDash([2, 3]);
+      pg.beginPath();
+      for (let j = 0; j <= N * k; j++) { const a = j / N * Math.PI / 2; const x = H0[0] + (along[0] * Math.cos(a) + norm[0] * Math.sin(a)) * Rw, z = H0[1] + (along[1] * Math.cos(a) + norm[1] * Math.sin(a)) * Rw; const pp = P(x, z); j ? pg.lineTo(...pp) : pg.moveTo(...pp); }
+      pg.stroke(); pg.setLineDash([]);
+      const e = P(H0[0] + norm[0] * Rw * k, H0[1] + norm[1] * Rw * k); pg.lineWidth = o.door.red ? 2 : 1.2; pg.beginPath(); pg.moveTo(...P(...H0)); pg.lineTo(...e); pg.stroke();
+    }
+  });
+  // furniture, as thin outlines
+  if (preState.furn > 0) {
+    pg.save(); pg.globalAlpha = L * preState.furn; pg.strokeStyle = 'rgba(14,14,16,.42)'; pg.lineWidth = .8; pg.setLineDash([]);
+    FOOT.forEach(f => {
+      pg.beginPath();
+      if (f.t === 'c') { for (let j = 0; j <= 24; j++) { const a = j / 24 * Math.PI * 2, pp = P(f.x + Math.cos(a) * f.r, f.z + Math.sin(a) * f.r); j ? pg.lineTo(...pp) : pg.moveTo(...pp); } }
+      else { const c = Math.cos(f.ry), sn = Math.sin(f.ry), hw = f.w / 2, hd = f.d / 2;
+        [[-hw, -hd], [hw, -hd], [hw, hd], [-hw, hd]].forEach(([u, v], j) => { const pp = P(f.x + u * c + v * sn, f.z - u * sn + v * c); j ? pg.lineTo(...pp) : pg.moveTo(...pp); }); pg.closePath(); }
+      pg.stroke();
+    });
+    pg.restore();
+  }
+  // balcony rail
+  pg.strokeStyle = 'rgba(14,14,16,.55)'; pg.lineWidth = 1; const bk = clamp(preState.draw * 1.3 - .3, 0, 1);
+  if (bk > 0) { const pts = [P(-5.92, 4.55), P(-5.92, 6.12), P(.92, 6.12), P(.92, 4.55)]; pg.beginPath(); pg.moveTo(...pts[0]); pg.lineTo(...pts[1]); pg.lineTo(pts[1][0] + (pts[2][0] - pts[1][0]) * bk, pts[1][1]); if (bk === 1) pg.lineTo(...pts[3]); pg.stroke(); }
+  pg.restore();
+  // bounding handles (red), like a vector editor
+  const H = preState.handles;
+  if (H > 0) {
+    pg.save(); pg.globalAlpha = L * H; pg.strokeStyle = '#0E0E10'; pg.fillStyle = '#0E0E10'; pg.lineWidth = 1; pg.setLineDash([]);
+    const off = 16, hl = (maxx - minx) * .28, vl = (maxy - miny) * .28;
+    const bar = (x1, y1, x2, y2) => { pg.beginPath(); pg.moveTo(x1, y1); pg.lineTo(x2, y2); pg.stroke(); [[x1, y1], [x2, y2]].forEach(([x, y]) => { pg.beginPath(); pg.arc(x, y, 2.6, 0, 7); pg.fill(); }); pg.save(); pg.fillStyle = '#fff'; pg.fillRect((x1 + x2) / 2 - 3.5, (y1 + y2) / 2 - 3.5, 7, 7); pg.strokeRect((x1 + x2) / 2 - 3.5, (y1 + y2) / 2 - 3.5, 7, 7); pg.restore(); };
+    bar(cx - hl * H, miny - off, cx + hl * H, miny - off); bar(cx - hl * H, maxy + off + (P(0, 6.2)[1] - maxy), cx + hl * H, maxy + off + (P(0, 6.2)[1] - maxy));
+    bar(minx - off, cy - vl * H, minx - off, cy + vl * H); bar(maxx + off, cy - vl * H, maxx + off, cy + vl * H);
+    pg.restore();
+  }
+  // room names, faint
+  if (preState.dims > 0) {
+    pg.save(); pg.globalAlpha = L * preState.dims * .7; pg.fillStyle = 'rgba(14,14,16,.72)'; pg.textAlign = 'center'; pg.direction = 'rtl';
+    pg.font = '600 10.5px Heebo';
+    rooms.forEach(r => { if (!r.n) return; const [x, y] = P(r.l[0], r.l[1]); pg.fillText(r.n, x, y); });
+    pg.restore();
+  }
+  // dimension strings
+  if (preState.dims > 0) {
+    pg.save(); pg.globalAlpha = L * preState.dims; pg.strokeStyle = 'rgba(14,14,16,.5)'; pg.fillStyle = 'rgba(14,14,16,.85)'; pg.lineWidth = 1;
+    pg.font = '600 11px "Barlow Condensed"'; pg.textAlign = 'center'; pg.textBaseline = 'middle';
+    const y = miny - 44; pg.beginPath(); pg.moveTo(minx, y); pg.lineTo(maxx, y); pg.stroke();
+    [minx, maxx].forEach(x => { pg.beginPath(); pg.moveTo(x - 4, y + 4); pg.lineTo(x + 4, y - 4); pg.moveTo(x, y - 7); pg.lineTo(x, y + 7); pg.stroke(); });
+    pg.fillStyle = '#FFFFFF'; pg.fillRect(cx - 22, y - 8, 44, 16); pg.fillStyle = 'rgba(14,14,16,.9)'; pg.fillText('12.25', cx, y);
+    const x = minx - 44; pg.beginPath(); pg.moveTo(x, miny); pg.lineTo(x, maxy); pg.stroke();
+    [miny, maxy].forEach(yy => { pg.beginPath(); pg.moveTo(x - 4, yy + 4); pg.lineTo(x + 4, yy - 4); pg.moveTo(x - 7, yy); pg.lineTo(x + 7, yy); pg.stroke(); });
+    pg.save(); pg.translate(x, cy); pg.rotate(-Math.PI / 2); pg.fillStyle = '#FFFFFF'; pg.fillRect(-20, -8, 40, 16); pg.fillStyle = 'rgba(14,14,16,.9)'; pg.fillText('9.05', 0, 0); pg.restore();
+    pg.restore();
+  }
+}
+
+/* ================================================================
+   TEXT HELPERS
+   ================================================================ */
+function splitWords(el) {
+  const sup = el.querySelector('sup'); const supHTML = sup ? sup.outerHTML : ''; if (sup) sup.remove();
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map((w, i) => `<span class="w">${w}${i === words.length - 1 ? supHTML : ''}</span>`).join(' ');
+  return $$('.w', el);
+}
+
+const TEAM = [["אריאל כהן ליפשיץ", "agent-eedc2a10", "a00.webp", 41], ["מאיר אלחרר", "agent-facfc7", "a01.webp", 25], ["שי פינטו", "shay-pinto-adcab4", "a02.webp", 24], ["תומר טלקר", "agent-c8c1af", "a03.webp", 24], ["עירן כהן", "agent-dd1a44", "a04.webp", 23], ["נופר הרוש", "agent-9c5be8", "a05.webp", 19], ["ריקרדו סופי", "ricardo-soppi-56de19", "a06.webp", 18], ["אורי אוחיון", "agent-75851a", "a07.webp", 16], ["נועה קייסמן", "agent-252350", "a08.webp", 10], ["אוריאל יוספי", "agent-914bd6", "a09.webp", 7], ["אריאלה אלון", "ariella-alon-08cd77", "a10.webp", 6], ["מזל עזרא", "agent-92e137", "a11.webp", 5], ["טלי חדד", "agent-d48347", "a12.webp", 4], ["יאיר שטרן", "yairsremax-1af1d5", "a13.webp", 3], ["שי שטרן", "agent-963b9ccf", "a14.webp", 3], ["שגיא סויסה", "agent-33bb86", "a15.webp", 3], ["אלעזר איתן", "agent-e1ec4a", "a16.webp", 3], ["שירי בוקובזה", "agent-bcee28", "a17.webp", 2], ["טוני בוהדנה", "agent-87c1bf", "a18.webp", 2], ["סגלית נבון", "agent-13c9f5", "a19.webp", 2], ["ישראלה פייקדו", "israela-pikado-7f2a07", "a20.webp", 2], ["ריקי טסלר", "agent-c420a9", "a21.webp", 2], ["רז ביטון", "agent-e956ed", "a22.webp", 1], ["נופר ניסני", "nofar-nisani-cf84f0", "a24.webp", 1], ["יונתן עוזר", "agent-5d9606", "a25.webp", 1], ["נריה שבזי", "agent-5bac6f61", "a26.webp", 0], ["שירה שמיר", "agent-816a0b", "a27.webp", 0], ["נפתלי איסחקוב", null, "a28.webp", 0], ["ניר יועץ", "agent-0ab3a6", "a29.webp", 0], ["אלכס רוזנטל", "alex-rozental-f0db9f", "a30.webp", 0], ["לאוניד גוגל", "gugel-leonid-a6fce2", "a31.webp", 0], ["אסף מויאל", "agent-e8c6c6", "a32.webp", 0], ["סימונה איליאספוב", "simona-eliassafov-d526b7", "a33.webp", 0], ["ליאל נגר", "agent-ba4db7", "a34.webp", 0], ["ניר וקנין", null, "a35.webp", 0], ["שילת יעקב", null, "a36.webp", 0], ["עמית בר", "agent-707fe7", "a37.webp", 0]];
+const HOMES = [{"slug": "beer-sheva-ramot-d-villa-aaff7853", "type": "villa", "price": 4200000, "nb": "רמות", "street": "יצחק מודעי", "rooms": 8, "sqm": 262, "floor": null, "city": "באר שבע", "agent": "שי שטרן", "agent_slug": "agent-963b9ccf", "img": "h0.webp", "w": 1170, "h": 778}, {"slug": "beer-sheva-neot-ilan-villa-8e199188", "type": "villa", "price": 3920000, "nb": "נאות אילן", "street": "נשר", "rooms": 5, "sqm": 253, "floor": null, "city": "באר שבע", "agent": "סגלית נבון", "agent_slug": "agent-13c9f5", "img": "h1.webp", "w": 1280, "h": 854}, {"slug": "beer-sheva-ramot-harekhes-apartment-8qvsjj", "type": "apartment", "price": 2100000, "nb": "רמות", "street": "שדרות הערים התאומות", "rooms": 5, "sqm": 177, "floor": 6, "city": "באר שבע", "agent": "אריאל כהן ליפשיץ", "agent_slug": "agent-eedc2a10", "img": "h2.webp", "w": 1800, "h": 1201}, {"slug": "beer-sheva-apartment-vz2jdi", "type": "apartment", "price": 2080000, "nb": "פארק הנחל", "street": "נחל ערוגות", "rooms": 5, "sqm": 220, "floor": 1, "city": "באר שבע", "agent": "נופר הרוש", "agent_slug": "agent-9c5be8", "img": "h3.webp", "w": 1536, "h": 1008}, {"slug": "--apartment-r5rxbd", "type": "apartment", "price": 1670000, "nb": "שכונה ב׳", "street": "סוקולוב", "rooms": 4, "sqm": 153, "floor": 21, "city": "באר שבע", "agent": "טוני בוהדנה", "agent_slug": "agent-87c1bf", "img": "h4.webp", "w": 1600, "h": 1066}, {"slug": "beer-sheva-neot-lon-villa-taq2nr", "type": "villa", "price": 3000000, "nb": "נאות לון", "street": "בן לברט", "rooms": 5, "sqm": 275, "floor": 0, "city": "באר שבע", "agent": "מאיר אלחרר", "agent_slug": "agent-facfc7", "img": "h5.webp", "w": 1800, "h": 1012}, {"slug": "beer-sheva-apartment-h4yuf9", "type": "apartment", "price": 1590000, "nb": "רמות", "street": "אהרון קציר", "rooms": 6, "sqm": 200, "floor": 2, "city": "באר שבע", "agent": "נועה קייסמן", "agent_slug": "agent-252350", "img": "h6.webp", "w": 1448, "h": 1086}];
+HOMES.splice(HOMES.findIndex(h => h.slug === 'beer-sheva-apartment-vz2jdi'), 1);   // it is the featured home now
+const HOODS = [["רמות", 34, 1520000], ["שכונה ד׳", 30, 770000], ["פארק הנחל", 26, 1590000], ["שכונה י״א", 19, 780000], ["שכונה ג׳", 17, 800000], ["נווה זאב", 16, 1275000], ["שכונה ב׳", 16, 980000], ["שכונה ו׳", 16, 1025000]];
+// real Google reviews (short excerpts, verbatim), place: "רי/מקס באר שבע", read on 5.11.2026
+const REVIEWS = [
+  { q: 'צוות שמוכיח שמקצועיות אמיתית מתחילה קודם כול באמינות, בהקשבה ובשירות ברמה גבוהה.', n: 'David D.', t: 'לפני חודשיים' },
+  { q: 'זו דירה שהייתה במרקט מעל שנה והיא זו שהצליחה לבסוף למכור אותה.', n: 'עליזה מ.', a: 'הסוכנת טלי חדד', al: 'agent-d48347', t: 'לפני חודשיים' },
+  { q: 'ליווי מקצועי, אמין, אכפתי ומסור… עד שהביאה אותנו לתוצאה שלא האמנו שנגיע אליה!', n: 'רפאל ל.', a: 'המתווכת אריאלה אלון', al: 'ariella-alon-08cd77', t: 'לפני 4 חודשים' },
+  { q: 'אם אתם מחפשים משרד נדל"ן שמבין אנשים לא פחות מנדל"ן – זה המקום!', n: 'זוהר ל.', t: 'לפני שנה' },
+  { q: 'היה שם בכל שעה, היה מענה לכל שאלה.', n: 'נילי ק.', a: 'המתווך ריקרדו סופי', al: 'ricardo-soppi-56de19', t: 'לפני חודשיים' },
+  { q: 'נתנה לי ולבעלי מענה מלא ותחושת ביטחון שלא קיבלנו מאף מתווך!', n: 'תאיר ג.', a: 'קורל', t: 'לפני 11 חודשים' },
+  { q: 'הסבירה לנו כל דבר בשקיפות רבה… סייעה לנו למצות את המשא ומתן לטובתנו', n: 'דור ש.', a: 'המתווכת מזל', t: 'לפני 11 חודשים' },
+  { q: 'לרימקס באר שבע מגיע פרס הנדל"ן בישראל. ממש מעל ומעבר מכל הבחינות', n: 'Lrscham', t: 'לפני חודש' }
+];
+const TOTAL = 2500;
+const DIVE = !RM && !Q.has('lite');
+
+const fmt = n => n.toLocaleString('en-US');
+const TYPE = { villa: 'וילה', apartment: 'דירה', house: 'בית פרטי' };
+const SHE = new Set(['סגלית נבון', 'טוני בוהדנה', 'נועה קייסמן', 'נופר הרוש']);   // for הסוכן / הסוכנת
+(function buildData() {
+  const idx = $('#idx');
+  HOODS.forEach(([n, c, m]) => { const r = document.createElement('div'); r.className = 'row'; r.innerHTML = `<b>${n}</b><span class="n">${c}</span><span class="m">${(m / 1e6).toFixed(2)} מ׳ ₪</span>`; idx.appendChild(r); });
+  const qs = $('#quotes');
+  REVIEWS.forEach(r => { const f = document.createElement('figure'); f.className = 'qq';
+    const ag = r.a ? `<span>· על ${r.al ? `<a href="https://nexa.co.il/he/agent/${r.al}" target="_blank" rel="noopener">${r.a}</a>` : r.a}</span>` : '';
+    f.innerHTML = `<blockquote>${r.q}</blockquote><figcaption class="qm"><b><bdi>${r.n}</bdi></b>${ag}<span>· ${r.t} ב-Google</span></figcaption>`; qs.appendChild(f); });
+  const rib = $('#ribbon');
+  TEAM.forEach(([n, slug, f]) => { const a = document.createElement(slug ? 'a' : 'span'); a.className = 'ag'; if (slug) { a.href = `https://nexa.co.il/he/agent/${slug}`; a.target = '_blank'; a.rel = 'noopener'; } a.innerHTML = `<img src="assets/team/${f}" alt="${n}" loading="lazy" decoding="async">`; rib.appendChild(a); });
+  const mp = $('#magp'), mi = $('#magi');
+  HOMES.forEach((h, i) => {
+    const url = `https://nexa.co.il/he/sale/${encodeURIComponent(h.slug)}`;
+    const a = document.createElement('a'); a.className = 'mp'; a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = `<img src="assets/homes/${h.img}" alt="${TYPE[h.type] || 'נכס'} ב${h.nb || h.city}" loading="lazy" decoding="async">`;
+    mp.appendChild(a);
+    const floor = h.floor === 0 ? ' · קומת קרקע' : h.floor ? ` · קומה ${h.floor}` : '';
+    const loc = [h.nb, h.street].filter(Boolean).join(' · ');
+    const d = document.createElement('div'); d.className = 'mi';
+    d.innerHTML = `<p class="no lat">${String(i + 1).padStart(2, '0')} / ${String(HOMES.length).padStart(2, '0')}</p><p class="ty">${TYPE[h.type] || 'נכס'} למכירה</p><p class="pr"><span>${fmt(h.price)} ₪</span></p><p class="sp">${h.rooms % 1 ? h.rooms : Math.round(h.rooms)} חדרים · ${h.sqm} מ״ר${floor}</p><p class="lo">${loc}</p><p class="ag2">${SHE.has(h.agent) ? 'הסוכנת' : 'הסוכן'}: ${h.agent}</p><a class="go" href="${url}" target="_blank" rel="noopener">לפרטים המלאים ←</a>`;
+    mi.appendChild(d);
+  });
+})();
+function layoutReal() {
+  const W = innerWidth, H = innerHeight, els = $$('#real .rp'), AR = [1600 / 1056, 1536 / 1008];
+  const put = (el, w, h) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.left = (W - w) / 2 + 'px'; el.style.top = (H - h) / 2 + 'px'; };
+  // r0 sits exactly where the portal plane is on screen at the end of the dive
+  const px = H / (2 * (PORTAL.CZ - PORTAL.Z) * Math.tan(PORTAL.FOV * Math.PI / 360));
+  if (DIVE) { put(els[0], PORTAL.W * px, PORTAL.W * px / PORTAL.AR); const l0 = (W - PORTAL.W * px) / 2 - (PORTAL.CX - PORTAL.X) * px, t0 = (H - PORTAL.W * px / PORTAL.AR) / 2; els[0].style.left = l0 + 'px'; els[0].style.transformOrigin = `${W / 2 - l0}px ${H / 2 - t0}px`; } else { const w = Math.max(W, H * AR[0]); put(els[0], w, w / AR[0]); }
+  els.slice(1).forEach((el, i) => { const ar = AR[i + 1], w = Math.max(W, H * ar) * 1.04; put(el, w, w / ar); });
+}
+const teamState = { cur: -1, pos: [], w: 0, total: 0 };
+function measureTeam() { const els = $$('#ribbon .ag'); teamState.els = els; teamState.pos = els.map(e => e.offsetLeft + e.offsetWidth / 2); teamState.w = els[0] ? els[0].offsetWidth : 0; teamState.total = $('#ribbon').scrollWidth; }
+function updateTeam() {
+  const W = innerWidth, st = teamState; if (!st.els) measureTeam(); if (!st.total) return;
+  const first = st.pos[0], last = st.pos[st.pos.length - 1];
+  const x = W / 2 - lerp(first, last, S.rib);
+  $('#ribbon').style.transform = `translate3d(${x}px,-50%,0)`;
+  let best = 0, bd = 1e9;
+  for (let i = 0; i < st.els.length; i++) {
+    const cx = x + st.pos[i], d = Math.abs(cx - W / 2); if (cx < -st.w * 2 || cx > W + st.w * 2) { st.els[i].style.visibility = 'hidden'; continue; }
+    st.els[i].style.visibility = 'visible';
+    const k = clamp(1 - d / (W * .42), 0, 1), e = k * k * (3 - 2 * k);
+    st.els[i].style.transform = `scale(${.68 + .62 * e})`;
+    st.els[i].style.opacity = (.28 + .72 * e).toFixed(3);
+    if (!MOBILE) st.els[i].style.filter = `grayscale(${(1 - e).toFixed(2)})`;
+    if (d < bd) { bd = d; best = i; }
+  }
+  if (best !== st.cur) {
+    st.cur = best; const t = TEAM[best];
+    $('#tname').textContent = t[0];
+    $('#tmeta').textContent = t[3] > 1 ? `${t[3]} נכסים פעילים · REMAX באר שבע` : t[3] === 1 ? 'נכס פעיל אחד · REMAX באר שבע' : 'REMAX באר שבע';
+    $('#tcount').textContent = String(best + 1).padStart(2, '0');
+  }
+}
+addEventListener('resize', () => { teamState.els = null; });
+
+/* ================================================================
+   BOOT
+   ================================================================ */
+try { history.scrollRestoration = 'manual'; } catch (e) {}
+scrollTo(0, 0);
+const lenis = new Lenis({ lerp: RM ? 1 : .085, wheelMultiplier: .9, smoothWheel: !RM });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+lenis.stop();
+window.__lenis = lenis;
+
+const html = document.documentElement;
+gsap.set(html, { '--bg': '#FFFFFF', '--fg': '#0E0E10' });
+
+(async function boot() {
+  const t0 = performance.now();
+  sizePre(); layout(); camera.position.set(0, VIEW.baseR, .0001); camera.lookAt(0, 0, 0); camera.updateMatrixWorld();
+  buildSegs();
+  if (preState.on) { gsap.ticker.add(frame); }
+  // preloader drawing runs while we generate textures
+  const pre = gsap.timeline();
+  if (preState.on) {
+    pre.to(preState, { draw: 1, duration: 1.9, ease: 'power2.inOut' }, .15)
+       .to(preState, { handles: 1, duration: 1.0, ease: 'expo.out' }, .35)
+       .to(preState, { dims: 1, duration: .6, ease: 'power2.out' }, 1.3)
+       ;
+    gsap.ticker.add(() => { if (preState.on && preState.wedgeT < .999) { preState.wedgeT += (Math.min(preState.real * .92, preState.draw) - preState.wedgeT) * .08; preState.wedge = Math.max(preState.wedge, preState.wedgeT); } });
+  }
+  const assetsP = Promise.all(GLBS.map(loadGLB));
+  if (preState.on) { const pt = setInterval(() => { preState.real = (packsDone / PACKS) * .7 + (LOAD.total ? LOAD.done / LOAD.total : 0) * .3; }, 60); assetsP.then(() => { clearInterval(pt); preState.real = 1; }); }
+  try { await Promise.race([Promise.all(['700 20px Heebo', '900 20px Heebo', '600 20px "Barlow Condensed"', '700 20px "Barlow Condensed"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+  matMat.map = matTexture(); labelMat.map = labelsTexture(VIEW.portrait ? -Math.PI / 2 : 0);
+  ruler.userData.top.map = makeRulerTex(); keys.userData.tagM.map = await makeTagTex();
+  [matMat, labelMat, ruler.userData.top, keys.userData.tagM].forEach(m => m.needsUpdate = true);
+  await Promise.race([assetsP, new Promise(r => setTimeout(r, 15000))]);
+  placeInterior();
+  PROP.pens = makeProp('stationery_supplies'); PROP.tape = makeProp('measuring_tape_01', [0, 0, Math.PI / 2]); PROP.specs = makeProp('round_spectacles');
+  layout();
+  portal.visible = true;
+  scene.traverse(o => { if (o.isMesh) [].concat(o.material).forEach(monoify); });
+  try { await renderer.compileAsync(scene, camera); } catch (e) { renderer.compile(scene, camera); }
+  { const o = canvas.style.opacity; canvas.style.opacity = 0; wallGroups.forEach(g => g.scale.y = 1); furn.scale.y = 1; renderer.render(scene, camera); canvas.style.opacity = o; }
+  if (!preState.on) gsap.ticker.add(frame);
+  const wait = Math.max(0, (RM ? 600 : MOBILE ? 1500 : 2050) - (performance.now() - t0));
+  if (preState.on) {
+    await new Promise(r => setTimeout(r, SKIP ? 0 : wait));
+    await new Promise(r => gsap.to(preState, { wedge: 1, duration: .55, ease: 'power2.inOut', onComplete: r }));
+  }
+  intro();
+})();
+
+// debug HUD (press F): fps, worst fps since opened, pixel ratio, load time, timeline position
+const HUD = { on: Q.has('hud'), el: null, n: 0, t0: 0, fps: 0, min: 999, load: 0, ready: 0 };
+function hudTick() {
+  if (!HUD.on) return; const now = performance.now(); HUD.n++;
+  if (!HUD.t0) HUD.t0 = now;
+  if (now - HUD.t0 > 500) { HUD.fps = HUD.n * 1000 / (now - HUD.t0); HUD.n = 0; HUD.t0 = now; if (window.__tl) HUD.min = Math.min(HUD.min, HUD.fps);
+    if (!HUD.el) { HUD.el = document.createElement('div'); HUD.el.style.cssText = 'position:fixed;left:8px;top:50%;z-index:99;background:#000;color:#0f0;font:11px/1.5 monospace;padding:6px 8px;border-radius:4px;direction:ltr;pointer-events:none;white-space:pre'; document.body.appendChild(HUD.el); }
+    const p = window.__tl ? Math.round(window.__tl.scrollTrigger.progress * TOTAL) : 0;
+    HUD.el.textContent = `fps ${HUD.fps.toFixed(0)}  min ${HUD.min === 999 ? '-' : HUD.min.toFixed(0)}\ndpr ${DPR.toFixed(2)}  ${innerWidth}x${innerHeight}\nassets ${(HUD.ready / 1000).toFixed(2)}s  interactive ${(HUD.load / 1000).toFixed(2)}s\nt ${p}  ${MOBILE ? 'mobile' : 'desktop'}${DIVE ? '' : ' lite'}`; }
+}
+// on a phone: long-press the logo to toggle the HUD
+{ const lg = $('.logo'), tog = () => { HUD.on = !HUD.on; HUD.min = 999; if (!HUD.on && HUD.el) { HUD.el.remove(); HUD.el = null; } }; let lp = null;
+  lg.addEventListener('pointerdown', () => { lp = setTimeout(() => { lp = 'done'; tog(); }, 700); });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => lg.addEventListener(ev, () => { if (lp !== 'done') { clearTimeout(lp); lp = null; } }));
+  lg.addEventListener('click', e => { if (lp === 'done') { e.preventDefault(); lp = null; } });
+  lg.addEventListener('contextmenu', e => e.preventDefault()); }
+addEventListener('keydown', e => { if (e.code === 'KeyF' && !e.metaKey && !e.ctrlKey) { HUD.on = !HUD.on; HUD.min = 999; if (!HUD.on && HUD.el) { HUD.el.remove(); HUD.el = null; } } });
+gsap.ticker.add(hudTick);
+function intro() {
+  HUD.ready = performance.now();
+  // the story always starts at the drawing, even if the browser restored a scroll position
+  window.scrollTo(0, 0); lenis.scrollTo(0, { immediate: true, force: true });
+  if (RM) gsap.globalTimeline.timeScale(2.5);
+  if (Q.has('fi')) setTimeout(() => gsap.globalTimeline.pause(), +Q.get('fi') * 1000);
+  const tl = gsap.timeline({ onComplete: () => { gsap.globalTimeline.timeScale(1); lenis.start(); buildScroll(); watchFps(); HUD.load = performance.now(); } });
+  tl.timeScale(1.45);
+  const instant = SKIP;
+  if (instant) {
+    Object.assign(preState, { on: true, bg: 0, draw: 1, wedge: 1, wedgeT: 1, handles: 0, dims: 1, lines: 1, furn: 1 }); preEl.style.zIndex = 1;
+    gsap.set(['#ui', '#chrome'], { visibility: 'visible' }); S.polar = .1;
+    gsap.set('.wl', { y: 0 });
+    gsap.set('.cue', { opacity: 1 }); gsap.set('.nav', { opacity: 1 });
+    lenis.start(); buildScroll(); watchFps(); HUD.load = performance.now(); return;
+  }
+  gsap.set('.wl', { y: 50 });
+  gsap.set(['#ui', '#chrome'], { visibility: 'visible' });
+  preEl.style.zIndex = 1;   // the drawing stays: it is the hero
+  tl.to(preState, { bg: 0, duration: 1.1, ease: 'power2.inOut' }, 0)
+    .to(preState, { handles: 0, duration: .9, ease: 'power2.inOut' }, .3)
+    .to(preState, { furn: 1, duration: 1.2, ease: 'power2.out' }, .2)
+    .to(S, { polar: .1, duration: 2.6, ease: 'power2.inOut' }, .5)
+    .to('.wl', { y: 0, duration: 1.35, ease: 'expo.out', stagger: .07 }, 1.05)
+    .to('.nav', { opacity: 1, duration: .9, ease: 'power2.out' }, 1.75)
+    .to('.cue', { opacity: 1, duration: .8 }, 2.0);
+}
+
+/* ================================================================
+   SCROLL CHOREOGRAPHY   (time unit = 1vh of scroll)
+   ================================================================ */
+function buildScroll() {
+  const words = splitWords($('#c2p'));
+  gsap.set('.c2 .stmt .mask > span, .c4 h2 .mask > span, .ch8h .mask > span', { yPercent: 110 });
+  gsap.set('.c2 .stmt', { filter: 'blur(0px)' });
+  gsap.set('#giant span', { xPercent: 26 });
+  gsap.set(['.c2', '.c3', '.c4', '.c5', '.c6', '.c7', '.c8', '.c9', '.c10'], { visibility: 'visible' });
+  gsap.set('.ch5h .mask > span, .ch6h .mask > span', { yPercent: 110 });
+  gsap.set('.idx .row', { x: -18 });
+  gsap.set('.mi', { y: 22 });
+  layoutReal();
+  const links = $$('.links a');
+  const setNav = i => links.forEach((a, k) => a.classList.toggle('on', k === i));
+
+  const pns = $$('.pn'), qqs = $$('.qq'), rcnt = { v: 0 };
+  gsap.set('.ch9h .mask > span', { yPercent: 110 });
+  const cnt = { v: 0 }; const mps = $$('.mp'), mpi = $$('.mp img'), mis = $$('.mi'), rps = $$('#real .rp');
+  const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#spacer', start: 'top top', end: 'bottom bottom', scrub: true,
+    onUpdate: st => {
+      const p = st.progress * TOTAL; setNav(p < 566 ? -1 : p < 1450 ? 0 : p < 1718 ? 1 : p < 1900 ? 2 : p < 1990 ? 3 : p < 2088 ? 4 : p < 2362 ? 5 : 6);
+      const on = p < 120 ? '.hero' : p < 270 ? '.c2' : p < 580 ? '.c3' : p < 928 ? '.c8' : p < 1236 ? '.c7' : p < 1454 ? '.c5' : p < 1718 ? '.c6' : p < 2088 ? '.c9' : p < 2362 ? '.c10' : '.c4';
+      $$('#ui .ch').forEach(c => c.classList.toggle('on', c.matches(on)));
+      pns.forEach((el, i) => el.classList.toggle('act', p > 1814 + i * 90 && p < 1814 + i * 90 + 82));
+    } } });
+
+  // ---------- HERO -> CH2 (0..150) ----------
+  tl.to('.cue', { opacity: 0, duration: 18 }, 0)
+    .to('.wl', { y: -50, duration: 46, ease: 'power2.in', stagger: 4 }, 26)
+    .to('.logo .dot', { scale: 0, opacity: 0, duration: 14 }, 66)
+    .to('.logo .mini', { opacity: 1, y: 0, duration: 24, ease: 'power2.out' }, 70)
+    // the white model is extruded out of the drawing
+    .to(S, { glO: 1, duration: 26, ease: 'power1.inOut' }, 4)
+    .to(wallGroups.map(g => g.userData), { rise: 1, duration: 44, ease: 'power2.out', stagger: 1.4 }, 8)
+    .to(furn.userData, { rise: 1, duration: 40, ease: 'power2.out' }, 40)
+    .to(preState, { lines: 0, duration: 56, ease: 'power1.inOut' }, 24)
+    // camera: top-down drawing -> three-quarter object
+    .to(S, { polar: 1.02, duration: 150, ease: 'power2.inOut' }, 0)
+    .to(S, { azim: -.62, duration: 150, ease: 'power2.inOut' }, 0)
+    .to(S, { rad: .7, duration: 150, ease: 'power2.inOut' }, 0)
+    .to(S, { ty: .9, duration: 150, ease: 'power2.inOut' }, 0)
+    .to(S, { rot: .38, duration: 150, ease: 'power2.inOut' }, 0)
+    .to(S, { catch: .42, duration: 60 }, 60)
+    .to(S, { labels: .0, duration: 50 }, 60)
+    .to(S, { sun: 3.0, sunX: -13, sunY: 12, sunZ: 2, hemi: .78, env: .5, exp: 1.0, duration: 120, ease: 'power1.inOut' }, 20)
+    // ---------- CH2 text (100..250) ----------
+    .to('.c2 .stmt .mask > span', { yPercent: 0, duration: 34, ease: 'power3.out', stagger: 8 }, 108)
+    .to('.c2 .p', { opacity: 1, duration: 14 }, 112)
+    .to(words, { opacity: 1, duration: 10, stagger: 7 }, 126)
+    .to('.foot', { opacity: 1, duration: 20 }, 150)
+    .to(S, { rot: 1.18, duration: 120, ease: 'none' }, 150)
+    .to(S, { azim: -.82, duration: 120, ease: 'none' }, 150)
+    // ---------- CH2 -> CH3 (250..340) ----------
+    .to('.c2 .stmt', { opacity: 0, filter: 'blur(14px)', y: -20, duration: 34, ease: 'power1.in' }, 252)
+    .to('.c2 .p', { opacity: 0, filter: 'blur(14px)', duration: 30, ease: 'power1.in' }, 256)
+    .to('.foot', { opacity: 0, duration: 20 }, 256)
+    .to(S, { catch: .24, sun: 2.7, sunX: -11, sunY: 17, sunZ: 4, hemi: .9, env: .58, exp: 1.0, duration: 50, ease: 'power2.inOut' }, 282)
+    .to(S, { rad: .98, polar: .96, ty: 1.1, duration: 90, ease: 'power2.inOut' }, 262)
+    .to(S, { c3y: .2, duration: 90, ease: 'power2.inOut' }, 262)
+    .to('#giant', { opacity: 1, duration: 30 }, 300)
+    .to('#giant span', { xPercent: 0, duration: 80, ease: 'power3.out' }, 296)
+    .to('.gobo', { opacity: 1, duration: 50 }, 300)
+    .to('.c3 .lead', { opacity: 1, duration: 26 }, 330)
+    .fromTo('.c3 .lead', { filter: 'blur(10px)', y: 14 }, { filter: 'blur(0px)', y: 0, duration: 30, ease: 'power2.out', immediateRender: false }, 330)
+    .to('.c3 .cap', { opacity: 1, duration: 30 }, 346)
+    .to(S, { c3: 1, duration: 40 }, 318)
+    .to(S, { sel: 1, duration: 30, ease: 'power2.out' }, 340)
+    .to('.sel', { opacity: 1, duration: 16 }, 338)
+    .to('#dim', { opacity: 1, duration: 20 }, 366)
+    .to(S, { rot: 3.9, duration: 260, ease: 'none' }, 270)
+    .to('#giant span', { xPercent: -7, duration: 190, ease: 'none' }, 376)
+    // ---------- CH3 -> THE DIVE (566..700): one continuous shot into the real apartment ----------
+    .to(['.c3 .lead', '.c3 .cap', '#dim'], { opacity: 0, filter: 'blur(10px)', duration: 26 }, 566)
+    .to('.sel', { opacity: 0, duration: 20 }, 566)
+    .to(S, { c3: 0, duration: 30 }, 572)
+    .to('#giant', { opacity: 0, duration: 18 }, 574)
+    .to('.gobo', { opacity: 0, duration: 30 }, 576);
+  if (DIVE) {
+    tl.to(S, { face: 1, duration: 62, ease: 'power2.inOut' }, 572)
+      .to(S, { c3y: 0, duration: 50, ease: 'power2.inOut' }, 572)
+      .to(S, { free: 1, duration: 60, ease: 'power2.inOut' }, 590)
+      .fromTo(S, { dive: 0 }, { dive: 1, duration: 110, ease: 'power2.inOut', immediateRender: false }, 590)
+      .to(S, { fov: PORTAL.FOV, duration: 84, ease: 'power2.inOut' }, 614)
+      .to(S, { catch: .45, sun: 2.9, sunX: -9, sunY: 15, sunZ: 10, hemi: .85, env: .55, duration: 60, ease: 'power1.inOut' }, 596)
+      .to(S, { portal: 1, duration: 24 }, 626)
+      .to(S, { door: 1, duration: 40, ease: 'power2.inOut' }, 640)
+      .to('#real', { opacity: 1, duration: .6 }, 699.4)
+      .to(S, { glO: 0, duration: .6 }, 700);
+  } else {
+    // reduced motion / lite: a calm cross-dissolve, no flight
+    tl.to(S, { glO: 0, duration: 36 }, 600).to('#real', { opacity: 1, duration: 36 }, 600).to(S, { c3y: 0, duration: 10 }, 640);
+  }
+  // ---------- THE PHOTO COMES ALIVE (700..830): walking in through the real rooms ----------
+  // keep walking forward into the room, then one soft cut to a closer frame of the same room
+  const soft = !MOBILE && !RM;
+  tl.fromTo(rps[0], { scale: 1 }, { scale: 1.16, duration: 96, ease: 'power1.out', immediateRender: false }, 700)
+    .fromTo('#real .glare', { opacity: 0, xPercent: -18 }, { opacity: .55, xPercent: 6, duration: 46, ease: 'sine.inOut', immediateRender: false }, 702)
+    .to('#real .glare', { opacity: 0, xPercent: 14, duration: 40, ease: 'sine.in' }, 748)
+    .fromTo(rps[1], { opacity: 0, scale: 1.07 }, { opacity: 1, scale: 1, duration: 24, ease: 'power1.inOut', immediateRender: false }, 760)
+    .to(rps[1], { scale: 1.08, duration: 150, ease: 'none' }, 784);
+  if (soft) tl.fromTo(rps[0], { filter: 'blur(0px)' }, { filter: 'blur(7px)', duration: 24, immediateRender: false }, 760)
+    .fromTo(rps[1], { filter: 'blur(8px)' }, { filter: 'blur(0px)', duration: 24, immediateRender: false }, 760);
+  // ---------- FEATURED HOME (800..928) ----------
+  tl.to('#real .shade', { opacity: 1, duration: 30 }, 806)
+    .to('.c8 .kick', { opacity: .8, duration: 20 }, 814)
+    .to('.ch8h .mask > span', { yPercent: 0, duration: 34, ease: 'power3.out' }, 816)
+    .to('.c8 .sub', { opacity: .92, duration: 24 }, 830)
+    .fromTo('.fcard', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 28, ease: 'power2.out', immediateRender: false }, 836)
+    .to('.c8 .pcred', { opacity: .85, duration: 20 }, 844)
+    .to(['.c8 .kick', '.ch8h', '.c8 .sub', '.fcard', '.c8 .pcred'], { opacity: 0, filter: 'blur(10px)', duration: 22, ease: 'power1.in' }, 902)
+    .to('#real', { opacity: 0, duration: 24 }, 910)
+    // the 3D waits for the end chapter (hidden): plan view, low walls, monochrome
+    .to(S, { polar: .0001, azim: 0, rot: Math.PI * 2, rad: 1.62, ty: 0, tzK: .4, endSink: 1, labels: 1, catch: .3, sun: 2.4, sunX: -7, sunY: 18, sunZ: -6, hemi: .95, env: .62, exp: 1.0,
+      face: 0, free: 0, dive: 0, fov: 26, door: 0, portal: 0, duration: 10 }, 1000);
+  // ---------- CATALOG (930..1236) ----------
+  const N = HOMES.length, C0 = 940;
+  tl.to('.c7 .kick', { opacity: .7, duration: 20 }, 930)
+    .to(['.magp', '.magbar'], { opacity: 1, duration: 14 }, 934)
+    .to('.c7 .more', { opacity: 1, duration: 20 }, 958)
+    .to('#magbar', { scaleX: 1, duration: 46 * N, ease: 'none' }, C0);
+  for (let i = 0; i < N; i++) {
+    const at = C0 + i * 46;
+    tl.to(mps[i], { clipPath: 'inset(0 0 0 0%)', duration: 30, ease: 'power3.inOut' }, at)
+      .to(mpi[i], { scale: 1, duration: 46, ease: 'power2.out' }, at)
+      .to(mis[i], { opacity: 1, y: 0, duration: 16, ease: 'power2.out' }, at + 12);
+    if (i) tl.to(mis[i - 1], { opacity: 0, y: -16, duration: 10, ease: 'power1.in' }, at + 2);
+  }
+  const CE = C0 + N * 46;
+  tl.to(['.magp', '.magi', '.magbar', '.c7 .kick', '.c7 .more'], { opacity: 0, duration: 20, ease: 'power1.in' }, CE - 4)
+    .to(html, { '--bg': '#000E35', '--fg': '#F2F0EA', duration: 24, ease: 'power3.inOut' }, CE + 10)
+    // ---------- CITY (1250..1456) ----------
+    .to('.city', { opacity: 1, duration: 40 }, 1250)
+    .fromTo('.city img', { scale: 1.12, xPercent: -1.5 }, { scale: 1.02, xPercent: 1.5, duration: 230, ease: 'none', immediateRender: false }, 1250)
+    .to('.c5 .kick', { opacity: .75, duration: 20 }, 1290)
+    .to('.ch5h .mask > span', { yPercent: 0, duration: 34, ease: 'power3.out', stagger: 8 }, 1294)
+    .fromTo(cnt, { v: 0 }, { v: 265, duration: 56, ease: 'power2.out', immediateRender: false, onUpdate: () => { $('#cnt').textContent = Math.round(cnt.v); } }, 1294)
+    .to('.idx .hd', { opacity: .6, duration: 16 }, 1310)
+    .to('.idx .row', { opacity: 1, x: 0, duration: 20, stagger: 5, ease: 'power2.out' }, 1314)
+    .to(['.c5 .note', '.c5 .credit'], { opacity: .7, duration: 20 }, 1354)
+    .to(['.ch5h', '.idx', '.c5 .kick', '.c5 .note', '.c5 .credit'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1430)
+    .to('.city', { opacity: 0, duration: 30 }, 1440)
+    // ---------- TEAM (1458..1720) ----------
+    .to(S, { team: 1, duration: 24 }, 1458)
+    .to('.ribbon', { opacity: 1, duration: 24 }, 1460)
+    .fromTo(S, { rib: 0 }, { rib: 1, duration: 230, ease: 'none', immediateRender: false }, 1466)
+    .to('.c6 .kick', { opacity: .75, duration: 20 }, 1472)
+    .to('.ch6h .mask > span', { yPercent: 0, duration: 34, ease: 'power3.out', stagger: 8 }, 1474)
+    .fromTo('.tframe', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: 24, ease: 'power2.out', immediateRender: false }, 1486)
+    .to('.c6 .more', { opacity: 1, duration: 20 }, 1504)
+    .to(['.ch6h', '.c6 .kick', '.tframe', '.c6 .more', '.ribbon'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1694)
+    .to(S, { team: 0, duration: 4 }, 1718)
+    // ---------- MORE THAN A BROKERAGE (1720..2088): investments, academy, careers ----------
+    .to('.c9 .kick', { opacity: .75, duration: 20 }, 1722)
+    .to('.ch9h .mask > span', { yPercent: 0, duration: 36, ease: 'power3.out', stagger: 8 }, 1724)
+    .to('.stats div', { opacity: 1, duration: 20, stagger: 8 }, 1744)
+    .to(['.c9 .kick', '.ch9h', '.stats'], { opacity: 0, filter: 'blur(10px)', duration: 22, ease: 'power1.in' }, 1794);
+  pns.forEach((el, i) => {
+    const at = 1814 + i * 90;
+    tl.fromTo(el, { autoAlpha: 0, x: -36 }, { autoAlpha: 1, x: 0, duration: 24, ease: 'power2.out', immediateRender: false }, at)
+      .fromTo(el.querySelectorAll('.pf li'), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 14, stagger: 5, ease: 'power2.out', immediateRender: false }, at + 10)
+      .to(el, { autoAlpha: 0, x: 36, duration: 16, ease: 'power1.in' }, at + 74);
+  });
+  // ---------- GOOGLE REVIEWS (2084..2362) ----------
+  const Q0 = 2122, QS = 30, QE = Q0 + QS * REVIEWS.length;
+  tl.to(html, { '--bg': '#FFFFFF', '--fg': '#0E0E10', duration: 26, ease: 'power3.inOut' }, 2082)
+    .to('.c10 .kick', { opacity: .7, duration: 20 }, 2100)
+    .to('.rate', { opacity: 1, duration: 24 }, 2104)
+    .fromTo(rcnt, { v: 0 }, { v: 4.8, duration: 40, ease: 'power2.out', immediateRender: false, onUpdate: () => { $('#rnum').textContent = rcnt.v.toFixed(1); } }, 2104)
+    .fromTo('.stars i', { '--f': 0 }, { '--f': .96, duration: 40, ease: 'power2.out', immediateRender: false }, 2108)
+    .to(['.qbar', '.c10 .qnote'], { opacity: 1, duration: 20 }, 2114)
+    .fromTo('#qbar', { scaleX: 0 }, { scaleX: 1, duration: QE - Q0, ease: 'none', immediateRender: false }, Q0);
+  qqs.forEach((el, i) => {
+    const at = Q0 + i * QS;
+    tl.fromTo(el, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 12, ease: 'power2.out', immediateRender: false }, at);
+    if (i < qqs.length - 1) tl.to(el, { autoAlpha: 0, y: -14, duration: 8, ease: 'power1.in' }, at + QS - 7);
+  });
+  tl.to(['.c10 .kick', '.rate', '.quotes', '.qbar', '.c10 .qnote'], { opacity: 0, filter: 'blur(10px)', duration: 20, ease: 'power1.in' }, QE + 2)
+    // ---------- END (2372..2500): back to the white drawing ----------
+    .to(S, { glO: 1, duration: 34 }, 2372)
+    .to(preState, { cons: 0, duration: 1 }, 2378)
+    .to(preState, { lines: .9, duration: 40 }, 2384)
+    .to('.c4 .k', { opacity: .7, duration: 24 }, 2398)
+    .to('.c4 h2 .mask > span', { yPercent: 0, duration: 40, ease: 'power3.out', stagger: 8 }, 2400)
+    .to('.c4 .row', { opacity: 1, duration: 26 }, 2430)
+    .to('.c4 .cred', { opacity: .5, duration: 20 }, 2448)
+    .to({}, { duration: 20 }, 2480);
+  window.__tl = tl;
+  ScrollTrigger.refresh();
+}
+
+function watchFps() {
+  let n = 0, t0 = performance.now(), steps = 0;
+  const tick = () => {
+    n++; const dt = performance.now() - t0;
+    if (dt > 2000) {
+      const fps = n * 1000 / dt; n = 0; t0 = performance.now();
+      if (fps < 45 && DPR > .8) { DPR = Math.max(.8, DPR - .3); renderer.setPixelRatio(DPR); layout(); steps++; }
+      if (steps >= 4 || fps >= 45) return;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+// in-page navigation (chapters live on the scroll timeline)
+$$('.links a[data-go]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault(); $('#links').classList.remove('open'); $('#burger').setAttribute('aria-expanded', 'false');
+  if (!window.__tl) return; const max = document.documentElement.scrollHeight - innerHeight;
+  lenis.scrollTo(+a.dataset.go / TOTAL * max, { duration: RM ? 0 : 2.2, easing: t => 1 - Math.pow(1 - t, 4) });
+}));
+$('#moreHomes').addEventListener('click', e => { e.preventDefault(); if (!window.__tl) return; const max = document.documentElement.scrollHeight - innerHeight; lenis.scrollTo(962 / TOTAL * max, { duration: RM ? 0 : 2.2, easing: t => 1 - Math.pow(1 - t, 4) }); });
+$('#burger').addEventListener('click', () => { const o = $('#links').classList.toggle('open'); $('#burger').setAttribute('aria-expanded', String(o)); });
+addEventListener('resize', () => { layout(); sizePre(); layoutReal(); ScrollTrigger.refresh(); });
+window.__seek = (vh) => { const max = document.documentElement.scrollHeight - innerHeight; lenis.scrollTo(Math.min(max, vh / TOTAL * max), { immediate: true, force: true }); ScrollTrigger.update(); };
+window.__ready = () => !!window.__tl;
+window.__dbg = { S, preState };
+</script>
+</body>
+</html>
