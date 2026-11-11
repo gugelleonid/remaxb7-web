@@ -36,7 +36,7 @@ a{color:inherit;text-decoration:none}
 #bgl{z-index:0}
 #ui{z-index:2}
 #chrome{z-index:4}
-#spacer{height:2600vh;position:relative;z-index:-1}
+#spacer{height:2830vh;position:relative;z-index:-1}
 .lat{font-family:var(--fc);font-weight:600;letter-spacing:.16em;text-transform:uppercase;direction:ltr;unicode-bidi:isolate}
 
 /* ---------- background layer ---------- */
@@ -83,7 +83,7 @@ a{color:inherit;text-decoration:none}
 /* ---------- chapters ---------- */
 .vig{position:absolute;inset:0;background:radial-gradient(120% 95% at 55% 45%, rgba(0,8,30,0) 55%, rgba(0,8,30,.38) 100%);opacity:0}
 .ch{position:absolute;inset:0}
-.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c10{visibility:hidden}
+.c2,.c3,.c4,.c5,.c6,.c7,.c8,.c9,.c10,.c11{visibility:hidden}
 .ch a,.ch button{pointer-events:none}.ch.on a,.ch.on button{pointer-events:auto}
 .mask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.04em}
 .mask > span{display:inline-block;will-change:transform}
@@ -215,6 +215,29 @@ a{color:inherit;text-decoration:none}
 .qbar i{position:absolute;inset:0;background:var(--bk);transform-origin:right;transform:scaleX(0)}
 .c10 .qnote{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.4);font-size:10.5px;opacity:0}
 
+/* supporting copy under chapter headings (Shai brief 1.3-1.5) */
+.sub2{position:absolute;right:var(--pad);font-weight:600;font-size:1.04vw;line-height:1.5;opacity:0}
+.sub2 b{display:block;font-weight:800;font-size:1.3vw;margin-bottom:.35vw;letter-spacing:-.005em;color:#fff}
+.c5 .sub2{top:calc(25% + 10.6vw);width:28vw;color:var(--cloud)}
+.c6 .sub2{top:calc(16.5% + 9.8vw);width:27vw;color:var(--cloud)}
+.c9 .sub2{top:calc(20% + 13.4vw);width:32vw;color:var(--cloud)}
+.pn .pa .lnk{font-weight:700;font-size:13px;border-bottom:1.5px dotted currentColor;padding-bottom:3px;margin-inline-start:6px}
+
+/* how we work: the client process (Shai brief 7) */
+.c11{color:var(--bk)}
+.c11 .kick{right:var(--pad);top:13%;color:var(--bk)}
+.ch11h{position:absolute;right:var(--pad);top:16.5%;font-weight:900;font-size:4.4vw;line-height:.98;letter-spacing:-.025em}
+.ch11h .mask{display:block}
+.steps{position:absolute;left:var(--pad);right:var(--pad);top:52%;display:grid;grid-template-columns:repeat(6,1fr);gap:1.6vw;list-style:none}
+.steps li{opacity:0;padding-top:1.1vw}
+.steps b{display:block;font-family:var(--fc);font-weight:600;font-size:3.6vw;line-height:.9;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+.steps h3{font-weight:800;font-size:1.22vw;line-height:1.25;margin-top:.9vw}
+.steps p{font-weight:600;font-size:.92vw;line-height:1.45;margin-top:.5vw;opacity:.68}
+.sline{position:absolute;left:var(--pad);right:var(--pad);top:52%;height:1.5px;background:rgba(14,14,16,.12);opacity:0}
+.sline i{position:absolute;inset:0;background:var(--red);transform-origin:right;transform:scaleX(0)}
+.c11 .cta{position:absolute;right:var(--pad);bottom:calc(var(--pad)*1.4);width:44vw;font-weight:700;font-size:1.3vw;line-height:1.45;opacity:0}
+.c4 .cred .pl a{border-bottom:1px dotted currentColor}
+
 /* city */
 .city{position:absolute;inset:0;opacity:0;overflow:hidden;background:var(--ink)}
 .city img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;filter:grayscale(.3) contrast(1.08) brightness(.62) saturate(.85);transform-origin:50% 62%;will-change:transform}
@@ -345,7 +368,13 @@ html.gl #ui,html.gl #chrome{visibility:hidden}
   .qq blockquote{font-size:7vw}.qq .qm{font-size:3.4vw;margin-top:4vw}
   .qbar{left:var(--pad);right:var(--pad);width:auto;bottom:calc(var(--pad)*3.4)}
   .c10 .qnote{left:var(--pad);font-size:9.5px}
-  #spacer{height:2040vh}
+  .sub2{left:var(--pad);width:auto!important;font-size:3.6vw}.sub2 b{font-size:4.3vw;margin-bottom:1vw}
+  .c5 .sub2{top:calc(13% + 22vw)}.c6 .sub2{top:calc(11% + 22vw)}.c9 .sub2{top:calc(15.5% + 27vw)}
+  .c11 .kick{top:9%}.ch11h{top:12%;font-size:9.6vw}
+  .steps,.sline{top:38%}.steps{grid-template-columns:1fr 1fr;gap:5vw 6vw}
+  .steps li{padding-top:2.4vw}.steps b{font-size:9vw}.steps h3{font-size:3.9vw;margin-top:1.6vw}.steps p{display:none}
+  .c11 .cta{left:var(--pad);width:auto;font-size:3.9vw;bottom:calc(var(--pad)*1.6)}
+  #spacer{height:2220vh}
   .pill{font-size:11px}
 }
 @media (prefers-reduced-motion: reduce){ .cue .r svg{animation:none} }
@@ -446,6 +475,7 @@ html.nogl .wl{transform:none!important}
     <p class="kick lat">From above · Beer Sheva</p>
     <h2 class="ch5h"><span class="mask"><span><b id="cnt">265</b> נכסים פעילים.</span></span><span class="mask"><span>עיר אחת.</span></span></h2>
     <div class="idx" id="idx"><div class="hd lat"><span>שכונה</span><span>נכסים</span><span>חציון מבוקש*</span></div></div>
+    <p class="sub2"><b>מכירים את השוק. מבינים את האנשים.</b>היכרות עמוקה עם השכונות, העסקאות והביקושים. שילוב של ניסיון מהשטח, נתוני אמת ואנשי מקצוע שמאפשר לנו לראות את מה שאחרים עלולים לפספס.</p>
     <p class="note">* חציון המחיר המבוקש לפי הנכסים הפעילים של המשרד ב-Nexa, נובמבר 2026. לא מחיר עסקה.</p>
     <p class="credit lat">Aerial photo: Amos Meron · CC BY-SA 3.0 · Wikimedia Commons</p>
   </section>
@@ -453,6 +483,7 @@ html.nogl .wl{transform:none!important}
   <section class="ch c6" id="team" aria-label="הצוות">
     <p class="kick lat">The team · REMAX Beer Sheva</p>
     <h2 class="ch6h"><span class="mask"><span>64 אנשי מקצוע.</span></span><span class="mask"><span>משרד אחד.</span></span></h2>
+    <p class="sub2"><b>אנשים שונים. סטנדרט אחד.</b>נבחרת של אנשי מקצוע שמאמינים בכוחה של עשייה משותפת, בלמידה מתמדת ובמחויבות להצלחה. כל אחד מביא את היכולות שלו. יחד אנחנו יוצרים משהו גדול יותר.</p>
     <div class="ribbon" id="ribbon"></div>
     <div class="tframe" id="tframe">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect class="b" x="0" y="0" width="100" height="100" vector-effect="non-scaling-stroke"/></svg>
@@ -473,6 +504,7 @@ html.nogl .wl{transform:none!important}
   <section class="ch c9" id="more" aria-label="יותר ממשרד תיווך">
     <p class="kick lat">More than a brokerage · REMAX Beer Sheva</p>
     <h2 class="ch9h"><span class="mask"><span>יותר ממשרד</span></span><span class="mask"><span>תיווך.</span></span></h2>
+    <p class="sub2"><b>עוצמה של ארגון. מחויבות של אנשים.</b>מאחורי כל עסקה עומדים ניסיון, מערכות, ידע, שיתופי פעולה ואנשים שחושבים יחד. כי הצלחה גדולה אינה מקרית. היא תוצאה של דרך.</p>
     <div class="stats">
       <div><b>20+</b><span>שנות פעילות בנגב</span></div>
       <div><b>64</b><span>סוכנים ואנשי מקצוע</span></div>
@@ -483,7 +515,7 @@ html.nogl .wl{transform:none!important}
       <h3 class="pt">אין לכם הון עצמי?<br>יש לכם תוכנית.</h3>
       <p class="pd">מחלקת ההשקעות של המשרד מאתרת דירות במחיר של עד 700 אלף ₪, מתחת למחיר השוק, ומלווה אתכם לאורך כל הדרך: מימון, עו״ד, שיפוץ, השכרה ומכירה.</p>
       <ul class="pf"><li><b>10</b><span>שירותים תחת קורת גג אחת</span></li><li><b>1</b><span>איש קשר מהיום הראשון ועד המכירה</span></li><li><b>18</b><span>חודשים מקנייה למכירה, בתרחיש לדוגמה</span></li></ul>
-      <div class="pa"><a class="btn" href="https://invest.remaxb7.co.il/" target="_blank" rel="noopener">למחלקת ההשקעות</a><a class="btn ghost" href="https://wa.me/972544442814?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20%D7%94%D7%94%D7%A9%D7%A7%D7%A2%D7%95%D7%AA" target="_blank" rel="noopener">WhatsApp למחלקה</a></div>
+      <div class="pa"><a class="btn" href="https://invest.remaxb7.co.il/" target="_blank" rel="noopener">למחלקת ההשקעות</a><a class="btn ghost" href="https://wa.me/972544442814?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20%D7%94%D7%94%D7%A9%D7%A7%D7%A2%D7%95%D7%AA" target="_blank" rel="noopener">WhatsApp למחלקה</a><a class="lnk" href="investments.html">איך המחלקה עובדת ←</a></div>
       <p class="note">תרחיש להמחשה ולא התחייבות לרווח. כמו בכל השקעה ממונפת, קיים גם סיכון.</p>
     </article>
     <article class="pn" id="academy" aria-label="האקדמיה">
@@ -491,14 +523,14 @@ html.nogl .wl{transform:none!important}
       <h3 class="pt">מאפס לסוכן<br>עם רישיון.</h3>
       <p class="pd">אנחנו מכשירים את הסוכנים שלנו בעצמנו: קורס במשרד עם סוכנים פעילים, הכנה למבחן רשם המתווכים, ומי שעובר אותו מצטרף לצוות.</p>
       <ul class="pf"><li class="hot"><b>11.26</b><span>מחזור נובמבר 2026 · 10 מפגשים</span></li><li><b>01.27</b><span>מחזור ינואר 2027 · 6 מפגשים</span></li><li><b>3</b><span>שלבים: הכשרה, מבחן רישוי, הצטרפות לצוות</span></li></ul>
-      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A1%D7%95%D7%9B%D7%A0%D7%99%20%D7%94%D7%A0%D7%93%D7%9C%D7%B4%D7%9F" target="_blank" rel="noopener">שריינו מקום בקורס</a><small>תאריכים, מחיר ופרטי המבחן ב-WhatsApp</small></div>
+      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A1%D7%95%D7%9B%D7%A0%D7%99%20%D7%94%D7%A0%D7%93%D7%9C%D7%B4%D7%9F" target="_blank" rel="noopener">שריינו מקום בקורס</a><a class="lnk" href="academy.html">מסלול האקדמיה ←</a><small>תאריכים, מחיר ופרטי המבחן ב-WhatsApp</small></div>
     </article>
     <article class="pn" id="careers" aria-label="גיוס סוכנים">
       <p class="pk lat">03 · Careers · גיוס סוכנים</p>
       <h3 class="pt">כבר עם רישיון?<br>בואו לליגה הבאה.</h3>
       <p class="pd">אצלנו אתם עצמאיים, אבל לא לבד: מותג בינלאומי, מערכות, הכשרה מתמשכת וקהילה של עשרות סוכנים שעובדים יחד.</p>
       <ul class="pf"><li><b>110+</b><span>מדינות שבהן פועלת רשת REMAX</span></li><li><b>750+</b><span>נכסים בניהול המשרד, שאפשר לעבוד איתם מהיום הראשון</span></li><li><b>Nexa</b><span>CRM, פרסום נכסים, הערכות שווי ולידים במקום אחד</span></li></ul>
-      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A0%D7%99%20%D7%A1%D7%95%D7%9B%D7%9F/%D7%AA%20%D7%A2%D7%9D%20%D7%A8%D7%99%D7%A9%D7%99%D7%95%D7%9F%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">קבעו שיחת היכרות</a><small>20 דקות עם הנהלת המשרד, בדיסקרטיות מלאה</small></div>
+      <div class="pa"><a class="btn" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A0%D7%99%20%D7%A1%D7%95%D7%9B%D7%9F/%D7%AA%20%D7%A2%D7%9D%20%D7%A8%D7%99%D7%A9%D7%99%D7%95%D7%9F%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%AA%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">קבעו שיחת היכרות</a><a class="lnk" href="careers.html">למה אצלנו ←</a><small>20 דקות עם הנהלת המשרד, בדיסקרטיות מלאה</small></div>
       <div class="qt"><img src="assets/team/a14.webp" alt="שי שטרן" loading="lazy" decoding="async"><p>הצלחה אמיתית לא נמדדת רק בכמות הנכסים או העסקאות. היא נמדדת ביכולת לבנות אנשים.<cite>שי שטרן, בעלים ומנהל המשרד</cite></p></div>
     </article>
   </section>
@@ -516,6 +548,14 @@ html.nogl .wl{transform:none!important}
     <p class="qnote">קטעים מתוך ביקורות של לקוחות בדף העסק ב-Google. הדירוג ומספר הביקורות נכונים ל-5 בנובמבר 2026.</p>
   </section>
 
+  <section class="ch c11" id="process" aria-label="איך אנחנו עובדים">
+    <p class="kick lat">How we work · REMAX Beer Sheva</p>
+    <h2 class="ch11h"><span class="mask"><span>ההחלטה הבאה שלכם</span></span><span class="mask"><span>ראויה לליווי הטוב ביותר.</span></span></h2>
+    <div class="sline"><i id="sline"></i></div>
+    <ol class="steps"><li><b>01</b><h3>היכרות והקשבה</h3><p>פגישה ראשונה: מה אתם מחפשים, ולמה.</p></li><li><b>02</b><h3>הגדרת צרכים ומטרות</h3><p>תקציב, לוח זמנים ומה באמת חשוב לכם.</p></li><li><b>03</b><h3>מחקר ואנליזה</h3><p>עסקאות שנסגרו בפועל באזור, לא מחירי מודעות.</p></li><li><b>04</b><h3>בניית אסטרטגיה</h3><p>תמחור, שיווק או חיפוש, לפי המטרה שלכם.</p></li><li><b>05</b><h3>ביצוע וליווי מקצועי</h3><p>סיורים, משא ומתן ותיאום מול עורכי הדין.</p></li><li><b>06</b><h3>השלמת העסקה וליווי המשך</h3><p>חתימה ומסירה, ואנחנו כאן גם אחרי.</p></li></ol>
+    <p class="cta">בין אם אתם מחפשים בית, מוכרים נכס, בוחנים השקעה או רוצים לבנות קריירה, אנחנו כאן כדי להוביל אתכם קדימה.</p>
+  </section>
+
   <section class="ch c4" id="contact" aria-label="צרו קשר">
     <p class="k lat">Contact · REMAX Beer Sheva</p>
     <h2><span class="mask"><span>נדבר על</span></span><span class="mask"><span>נדל״ן?</span></span></h2>
@@ -524,7 +564,7 @@ html.nogl .wl{transform:none!important}
       <a class="btn ghost" href="https://wa.me/972505599259?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A2%D7%96%D7%A8%D7%94%20%D7%91%D7%97%D7%99%D7%A4%D7%95%D7%A9%20%D7%A0%D7%9B%D7%A1%20%D7%9C%D7%A7%D7%A0%D7%99%D7%99%D7%94%20%D7%90%D7%95%20%D7%9C%D7%A9%D7%9B%D7%99%D7%A8%D7%95%D7%AA" target="_blank" rel="noopener">לקנות או לשכור נכס</a>
       <span class="addr">יצחק נפחא 25, באר שבע · <span class="lat">050-559-9259</span></span>
     </div>
-    <p class="cred">© 2026 REMAX באר שבע · חזון שיא בע״מ · כל משרד REMAX בבעלות ובניהול עצמאיים<br><span class="lat">Prototype v0.8 · 3D scans: Poly Haven (CC0) · Sofa: Wayfair (CC BY 4.0) · Chair: Wayfair (CC0) · Data &amp; listing photos: Nexa</span></p>
+    <p class="cred"><span class="pl"><a href="about.html">אודות</a> · <a href="investments.html">השקעות</a> · <a href="academy.html">אקדמיה</a> · <a href="careers.html">קריירה</a></span><br>© 2026 REMAX באר שבע · חזון שיא בע״מ · כל משרד REMAX בבעלות ובניהול עצמאיים<br><span class="lat">Prototype v0.9 · 3D scans: Poly Haven (CC0) · Sofa: Wayfair (CC BY 4.0) · Chair: Wayfair (CC0) · Data &amp; listing photos: Nexa</span></p>
   </section>
 </div>
 
@@ -532,7 +572,7 @@ html.nogl .wl{transform:none!important}
   <header class="nav">
     <a class="logo" href="#" aria-label="REMAX באר שבע"><span class="dot"></span><svg class="mini" viewBox="0 0 220 60" aria-hidden="true"><g><path fill="currentColor" d="M14.4,31c-.5,0-.9-.3-1.3-.6-2.4-2-6.6-5.7-8.2-7.8-1.4-1.7-2.7-3.3-3.3-5.4-.4-1.2-.5-2.4-.5-3.6s.3-3.2.9-4.7C4,4,8.9.8,14.4.8s10.4,3.2,12.4,8.2c.6,1.5.9,3.1.9,4.7s-.2,2.4-.5,3.6c-.6,2-1.8,3.6-3.3,5.4-1.7,2-5.9,5.7-8.2,7.7-.4.3-.8.6-1.3.6Z"/><path style="fill:var(--bg)" d="M26.2,9.2H2.6c-.6,1.4-.9,2.9-.9,4.4s.2,2.3.5,3.4h24.3c.3-1.1.5-2.2.5-3.4s-.3-3.1-.9-4.4Z"/><path fill="currentColor" d="M14.4,1.5c-5.4,0-10,3.2-11.8,7.7h23.6c-1.8-4.5-6.4-7.7-11.8-7.7Z"/><path fill="currentColor" d="M2.2,17.1c.6,2,1.9,3.6,3.2,5.2,1.7,2.1,6.4,6.2,8.2,7.8h0c.2.2.5.4.8.4s.5-.2.8-.4h0c1.8-1.6,6.5-5.7,8.2-7.8,1.3-1.6,2.6-3.2,3.2-5.2H2.2Z"/><path fill="currentColor" d="M26.2,9.2h-11.8V3.6c0-1.2,1.1-2.1,2.3-1.9,4.4.8,8,3.7,9.5,7.5Z"/><path fill="currentColor" d="M26.5,17.1c-.6,2-1.9,3.6-3.2,5.2-1.7,2.1-6.4,6.2-8.2,7.8h0c-.2.2-.5.4-.8.4v-11.3c0-1.1.9-2,2-2h10.1Z"/></g><g fill="currentColor"><path d="M51.2,34.7c-1,.9-2.7,1.4-5.1,1.4h-5.7v-10.7h5.6c2.5,0,4.2.4,5.2,1.3,1,.9,1.5,2.2,1.5,4s-.5,3.2-1.5,4.1ZM56.9,42.2c4.3-2.5,6.5-6.5,6.5-12s-1.3-7.4-4-9.8c-2.7-2.4-6.9-3.6-12.8-3.6h-17v42.3h10.7v-14.6h6.6l7.1,14.6h11.7l-8.8-17Z"/><path d="M94.9,25.7v-8.9h-29.2v42.3h15.7l4.6-8.9h-9.2v-8.1h13.4l4.7-9h-18.1v-7.5h18.1Z"/><path d="M199.9,37.3l12.6-20.5h-12.1l-7.2,12.9-7.2-12.9h-12.6l12.6,20.1-8.6,14-11.6-34.1h-13.7l-12.3,35.9V16.8h-13l-9.4,28.6-9.4-28.6h-4.6l-8.5,16.4v26h10.1v-25l8.1,25h8.1l8.2-25.1v25.1h19.4l2.6-8.1h14.7l2.5,8.1h0s0,0,0,0h15.8l8.2-14.8,8.8,14.8h12.7l-14.3-21.8ZM154.1,42l4.7-15.8,4.7,15.8h-9.5Z"/><path d="M218.8,18.6c0,1.1-.8,1.8-1.8,1.8s-1.8-.7-1.8-1.8.8-1.8,1.8-1.8,1.8.7,1.8,1.8ZM218.5,18.6c0-.9-.7-1.5-1.4-1.5s-1.4.6-1.4,1.5.7,1.5,1.4,1.5,1.4-.6,1.4-1.5ZM217.5,18.7l.4.8h-.5l-.4-.7h-.2v.7h-.5v-1.9h.8c.5,0,.7.2.7.6s-.1.4-.4.5ZM216.8,18.4h.3c.2,0,.3,0,.3-.3s-.1-.3-.3-.3h-.3v.5Z"/></g></svg></a>
     <nav class="links" id="links" aria-label="ניווט">
-      <a href="#homes" data-go="962">נכסים</a><a href="#team" data-go="1560">הצוות</a><a href="#invest" data-go="1836">השקעות</a><a href="#academy" data-go="1926">אקדמיה</a><a href="#careers" data-go="2016">קריירה</a><a href="#reviews" data-go="2150">ביקורות</a><a href="#contact" data-go="2482">צרו קשר</a>
+      <a href="#homes" data-go="962">נכסים</a><a href="#team" data-go="1560">הצוות</a><a href="#invest" data-go="1836">השקעות</a><a href="#academy" data-go="1926">אקדמיה</a><a href="#careers" data-go="2016">קריירה</a><a href="#reviews" data-go="2150">ביקורות</a><a href="#contact" data-go="2702">צרו קשר</a><a href="about.html">אודות</a>
     </nav>
     <div class="mob">
       <a class="wa" href="https://wa.me/972505599259" aria-label="WhatsApp למשרד">WhatsApp</a>
@@ -1513,7 +1553,7 @@ const REVIEWS = [
   { q: 'הסבירה לנו כל דבר בשקיפות רבה… סייעה לנו למצות את המשא ומתן לטובתנו', n: 'דור ש.', a: 'המתווכת מזל', t: 'לפני 11 חודשים' },
   { q: 'לרימקס באר שבע מגיע פרס הנדל"ן בישראל. ממש מעל ומעבר מכל הבחינות', n: 'Lrscham', t: 'לפני חודש' }
 ];
-const TOTAL = 2500;
+const TOTAL = 2720;
 const DIVE = !RM && !Q.has('lite');
 
 const fmt = n => n.toLocaleString('en-US');
@@ -1681,7 +1721,7 @@ function buildScroll() {
   gsap.set('.c2 .stmt .mask > span, .c4 h2 .mask > span, .ch8h .mask > span', { yPercent: 110 });
   gsap.set('.c2 .stmt', { filter: 'blur(0px)' });
   gsap.set('#giant span', { xPercent: 26 });
-  gsap.set(['.c2', '.c3', '.c4', '.c5', '.c6', '.c7', '.c8', '.c9', '.c10'], { visibility: 'visible' });
+  gsap.set(['.c2', '.c3', '.c4', '.c5', '.c6', '.c7', '.c8', '.c9', '.c10', '.c11'], { visibility: 'visible' });
   gsap.set('.ch5h .mask > span, .ch6h .mask > span', { yPercent: 110 });
   gsap.set('.idx .row', { x: -18 });
   gsap.set('.mi', { y: 22 });
@@ -1690,12 +1730,12 @@ function buildScroll() {
   const setNav = i => links.forEach((a, k) => a.classList.toggle('on', k === i));
 
   const pns = $$('.pn'), qqs = $$('.qq'), rcnt = { v: 0 };
-  gsap.set('.ch9h .mask > span', { yPercent: 110 });
+  gsap.set('.ch9h .mask > span, .ch11h .mask > span', { yPercent: 110 });
   const cnt = { v: 0 }; const mps = $$('.mp'), mpi = $$('.mp img'), mis = $$('.mi'), rps = $$('#real .rp');
   const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#spacer', start: 'top top', end: 'bottom bottom', scrub: true,
     onUpdate: st => {
-      const p = st.progress * TOTAL; setNav(p < 566 ? -1 : p < 1450 ? 0 : p < 1718 ? 1 : p < 1900 ? 2 : p < 1990 ? 3 : p < 2088 ? 4 : p < 2362 ? 5 : 6);
-      const on = p < 120 ? '.hero' : p < 270 ? '.c2' : p < 580 ? '.c3' : p < 928 ? '.c8' : p < 1236 ? '.c7' : p < 1454 ? '.c5' : p < 1718 ? '.c6' : p < 2088 ? '.c9' : p < 2362 ? '.c10' : '.c4';
+      const p = st.progress * TOTAL; setNav(p < 566 ? -1 : p < 1450 ? 0 : p < 1718 ? 1 : p < 1900 ? 2 : p < 1990 ? 3 : p < 2088 ? 4 : p < 2362 ? 5 : p < 2590 ? -1 : 6);
+      const on = p < 120 ? '.hero' : p < 270 ? '.c2' : p < 580 ? '.c3' : p < 928 ? '.c8' : p < 1236 ? '.c7' : p < 1454 ? '.c5' : p < 1718 ? '.c6' : p < 2088 ? '.c9' : p < 2362 ? '.c10' : p < 2590 ? '.c11' : '.c4';
       $$('#ui .ch').forEach(c => c.classList.toggle('on', c.matches(on)));
       pns.forEach((el, i) => el.classList.toggle('act', p > 1814 + i * 90 && p < 1814 + i * 90 + 82));
     } } });
@@ -1812,8 +1852,9 @@ function buildScroll() {
     .fromTo(cnt, { v: 0 }, { v: 265, duration: 56, ease: 'power2.out', immediateRender: false, onUpdate: () => { $('#cnt').textContent = Math.round(cnt.v); } }, 1294)
     .to('.idx .hd', { opacity: .6, duration: 16 }, 1310)
     .to('.idx .row', { opacity: 1, x: 0, duration: 20, stagger: 5, ease: 'power2.out' }, 1314)
+    .to('.c5 .sub2', { opacity: .9, duration: 22 }, 1326)
     .to(['.c5 .note', '.c5 .credit'], { opacity: .7, duration: 20 }, 1354)
-    .to(['.ch5h', '.idx', '.c5 .kick', '.c5 .note', '.c5 .credit'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1430)
+    .to(['.ch5h', '.idx', '.c5 .kick', '.c5 .note', '.c5 .credit', '.c5 .sub2'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1430)
     .to('.city', { opacity: 0, duration: 30 }, 1440)
     // ---------- TEAM (1458..1720) ----------
     .to(S, { team: 1, duration: 24 }, 1458)
@@ -1822,14 +1863,16 @@ function buildScroll() {
     .to('.c6 .kick', { opacity: .75, duration: 20 }, 1472)
     .to('.ch6h .mask > span', { yPercent: 0, duration: 34, ease: 'power3.out', stagger: 8 }, 1474)
     .fromTo('.tframe', { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: 24, ease: 'power2.out', immediateRender: false }, 1486)
+    .to('.c6 .sub2', { opacity: .88, duration: 22 }, 1496)
     .to('.c6 .more', { opacity: 1, duration: 20 }, 1504)
-    .to(['.ch6h', '.c6 .kick', '.tframe', '.c6 .more', '.ribbon'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1694)
+    .to(['.ch6h', '.c6 .kick', '.tframe', '.c6 .more', '.ribbon', '.c6 .sub2'], { opacity: 0, filter: 'blur(10px)', duration: 24, ease: 'power1.in' }, 1694)
     .to(S, { team: 0, duration: 4 }, 1718)
     // ---------- MORE THAN A BROKERAGE (1720..2088): investments, academy, careers ----------
     .to('.c9 .kick', { opacity: .75, duration: 20 }, 1722)
     .to('.ch9h .mask > span', { yPercent: 0, duration: 36, ease: 'power3.out', stagger: 8 }, 1724)
-    .to('.stats div', { opacity: 1, duration: 20, stagger: 8 }, 1744)
-    .to(['.c9 .kick', '.ch9h', '.stats'], { opacity: 0, filter: 'blur(10px)', duration: 22, ease: 'power1.in' }, 1794);
+    .to('.c9 .sub2', { opacity: .88, duration: 20 }, 1746)
+    .to('.stats div', { opacity: 1, duration: 20, stagger: 8 }, 1752)
+    .to(['.c9 .kick', '.ch9h', '.stats', '.c9 .sub2'], { opacity: 0, filter: 'blur(10px)', duration: 22, ease: 'power1.in' }, 1794);
   pns.forEach((el, i) => {
     const at = 1814 + i * 90;
     tl.fromTo(el, { autoAlpha: 0, x: -36 }, { autoAlpha: 1, x: 0, duration: 24, ease: 'power2.out', immediateRender: false }, at)
@@ -1851,15 +1894,23 @@ function buildScroll() {
     if (i < qqs.length - 1) tl.to(el, { autoAlpha: 0, y: -14, duration: 8, ease: 'power1.in' }, at + QS - 7);
   });
   tl.to(['.c10 .kick', '.rate', '.quotes', '.qbar', '.c10 .qnote'], { opacity: 0, filter: 'blur(10px)', duration: 20, ease: 'power1.in' }, QE + 2)
-    // ---------- END (2372..2500): back to the white drawing ----------
-    .to(S, { glO: 1, duration: 34 }, 2372)
-    .to(preState, { cons: 0, duration: 1 }, 2378)
-    .to(preState, { lines: .9, duration: 40 }, 2384)
-    .to('.c4 .k', { opacity: .7, duration: 24 }, 2398)
-    .to('.c4 h2 .mask > span', { yPercent: 0, duration: 40, ease: 'power3.out', stagger: 8 }, 2400)
-    .to('.c4 .row', { opacity: 1, duration: 26 }, 2430)
-    .to('.c4 .cred', { opacity: .5, duration: 20 }, 2448)
-    .to({}, { duration: 20 }, 2480);
+    // ---------- HOW WE WORK (2372..2580): the client process ----------
+    .to('.c11 .kick', { opacity: .7, duration: 20 }, 2374)
+    .to('.ch11h .mask > span', { yPercent: 0, duration: 36, ease: 'power3.out', stagger: 8 }, 2376)
+    .to('.sline', { opacity: 1, duration: 14 }, 2398)
+    .fromTo('#sline', { scaleX: 0 }, { scaleX: 1, duration: 84, ease: 'none', immediateRender: false }, 2402)
+    .fromTo('.steps li', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 16, stagger: 14, ease: 'power2.out', immediateRender: false }, 2402)
+    .to('.c11 .cta', { opacity: 1, duration: 22 }, 2484)
+    .to(['.c11 .kick', '.ch11h', '.sline', '.steps', '.c11 .cta'], { opacity: 0, filter: 'blur(10px)', duration: 22, ease: 'power1.in' }, 2556)
+    // ---------- END (2592..2720): back to the white drawing ----------
+    .to(S, { glO: 1, duration: 34 }, 2592)
+    .to(preState, { cons: 0, duration: 1 }, 2598)
+    .to(preState, { lines: .9, duration: 40 }, 2604)
+    .to('.c4 .k', { opacity: .7, duration: 24 }, 2618)
+    .to('.c4 h2 .mask > span', { yPercent: 0, duration: 40, ease: 'power3.out', stagger: 8 }, 2620)
+    .to('.c4 .row', { opacity: 1, duration: 26 }, 2650)
+    .to('.c4 .cred', { opacity: .5, duration: 20 }, 2668)
+    .to({}, { duration: 20 }, 2700);
   window.__tl = tl;
   ScrollTrigger.refresh();
 }
